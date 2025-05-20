@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Local Help Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header,
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 1.2em;
+            position: relative;
+        }
+
+        .logo-link {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            text-decoration: none;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .logo-link.hide {
+            transform: translateY(-100px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .logo-icon {
+            font-size: 5em;
+            color: white;
+            transition: transform 0.2s ease, font-size 0.3s ease;
+        }
+
+        .logo-icon:hover {
+            transform: scale(1.2) rotate(-5deg);
+        }
+
+        nav {
+            background: #333;
+            display: flex;
+            justify-content: center;
+            gap: 2em;
+            padding: 1em;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            padding: 2em;
+        }
+
+        h2 {
+            margin-top: 2em;
+            color: #222;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 1em;
+        }
+
+        .card {
+            background: white;
+            padding: 1.2em;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            gap: 0.8em;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card .icon {
+            font-size: 1.8em;
+            color: #444;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 0.3em;
+        }
+
+        .card-short {
+            color: #555;
+        }
+
+        .service-page,
+        .contact-page,
+        .goal-page {
+            display: none;
+            background: white;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 2em;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+
+        .contact-form button {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .contact-form button:hover {
+            background: #444;
+        }
+
+        .form-status {
+            text-align: center;
+            margin-top: 1em;
+            font-weight: bold;
+        }
+
+        footer p a {
+            color: #ccc;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 1em;
+            background: #eee;
+            padding: 10px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: background 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background: #ddd;
+        }
+
+        .btn-book {
+            margin-top: 1em;
+            background: #007BFF;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-book:hover {
+            background: #0056b3;
+        }
+
+        /* Loader Styles */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-icon,
+        .loader-logo {
+            position: absolute;
+            font-size: 7em;
+            color: white;
+        }
+
+        /* Spinner fade-and-scale-out */
+        @keyframes fade-and-scale-out {
+            0% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.3) rotate(360deg);
+            }
+        }
+
+        /* Handshake float-and-spin-in */
+        @keyframes float-and-spin {
+            0% {
+                transform: scale(0.5) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.75) translate(-800px, -420px) rotate(720deg);
+                opacity: 1;
+            }
+        }
+
+        .loader-icon.spin-out {
+            animation: fade-and-scale-out 0.8s ease forwards;
+        }
+
+        .loader-logo {
+            opacity: 0;
+        }
+
+        .loader-logo.animate-in {
+            animation: float-and-spin 1.5s ease forwards;
+        }
+
+        .spin-custom {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                gap: 1em;
+            }
+        }
+
+        #storeGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .storecard {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .storecard img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .storecard .card-bottom {
+            margin-top: auto;
+            padding-top: 10px;
+            padding-bottom: 1em;
+        }
+
+        .storecard h1 {
+            font-size: 1.2em;
+            margin: 10px 0 5px 0;
+        }
+
+        .storecard .price {
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .storecard button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .storecard button:hover {
+            background-color: #0056b3;
+        }
+
+        .auto-fill-form {
+            display: none;
+            /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .auto-fill-form.show {
+            display: flex;
+            /* This should be the state when the form is shown */
+        }
+
+        .auto-fill-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        .auto-fill-content h3 {
+            margin-bottom: 10px;
+        }
+
+        .auto-fill-content p {
+            margin: 10px 0;
+        }
+
+        .auto-fill-form input,
+        .auto-fill-form button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .auto-fill-form button {}
+
+        .auto-fill-form button:hover {
+            background-color: #218838;
+        }
+
+        .auto-fill-form .close-btn {
+            background-color: #dc3545;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .auto-fill-form .close-btn:hover {
+            background-color: #c82333;
+        }
+
+        #couponAlert {
+            display: none;
+            background-color: #fffbcc;
+            color: #333;
+            text-align: center;
+            padding: 1em;
+            font-weight: bold;
+            font-size: 1.1em;
+            border-bottom: 2px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loader -->
+    <div id="loader">
+        <i class="fas fa-spinner loader-icon spin-only spin-custom"></i>
+        <i class="fas fa-handshake-angle loader-logo hidden"></i>
+    </div>
+    <header>
+        <a href="#home" class="logo-link">
+            <i class="fa-solid fa-handshake-angle logo-icon"></i>
+        </a>
+        <h1>Looking for Help? Look No Further!</h1>
+        <p>Local • Trusted • Friendly Service</p>
+    </header>
+    <nav>
+        <a href="#home">Services</a>
+        <a href="#contact">Contact</a>
+        <a href="#goals">Goals</a>
+        <a href="#store">Store</a>
+    </nav>
+    <main>
+        <section id="home">
+            <h2>Services We Offer</h2>
+            <div class="grid" id="serviceGrid"></div>
+        </section>
+        <section id="servicePage" class="service-page"></section>
+        <section id="contact" class="contact-page">
+            <h2>Contact Us</h2>
+            <form class="contact-form" action="https://formspree.io/f/mldblrrq" method="POST">
+                <input type="text" name="name" placeholder="Your Name" required />
+                <input type="email" name="email" placeholder="Your Email" required />
+                <input type="text" name="address" placeholder="Your Address" required />
+                <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                <input type="hidden" name="_subject" value="New message from local help site!" />
+                <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
+                <button type="submit">Send Message</button>
+                <div class="form-status" id="formStatus"></div>
+            </form>
+        </section>
+        <section id="goals" class="goal-page">
+            <h2>Our Goal</h2>
+            <p>We’re working to raise $2,000 over the summer. Every service booked helps us reach that goal—thank you!</p>
+            <p>Can't find a service you're looking for? Let us know! We're here to help</p>
+        </section>
+        <section id="store" class="storefront">
+            <h2>Store</h2>
+            <div class="store-grid" id="storeGrid">
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2025 Neighborhood Helpers Services | Contact: <a href="mailto:andygardner222@gmail.com">Andrew</a> & <a href="mailto:logangardner301@gmail.com">Logan</a></p>
+        <p style="font-size:75%">Please note not all locations in service area</p>
+    </footer>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('loader');
+            const spinner = loader.querySelector('.loader-icon');
+            const logo = loader.querySelector('.loader-logo');
+            setTimeout(() => {
+                // animate spinner out
+                spinner.classList.add('spin-out');
+                // animate handshake in
+                logo.classList.remove('hidden');
+                logo.classList.add('animate-in');
+                // fade out loader container
+                setTimeout(() => {
+                    loader.style.opacity = 0;
+                    setTimeout(() => loader.remove(), 1000);
+                }, 2500);
+            }, 2500);
+        });
+        const services = [{
+                title: "Trash & Recycling Bin Service",
+                short: "$2–5/week",
+                details: "We'll take your bins to/from the curb weekly or on demand.",
+                icon: "fa-trash"
+            },
+            {
+                title: "Light or Heavy Yard Work",
+                short: "$15–50",
+                details: "Includes mowing, weeding, raking. Price depends on complexity.",
+                icon: "fa-leaf"
+            },
+            {
+                title: "Dog Walking",
+                short: "$10/day",
+                details: "Let us walk your pup and make sure they get some exercise!",
+                icon: "fa-dog"
+            },
+            {
+                title: "Watering Plants",
+                short: "$2 one-time | $5 weekly",
+                details: "Going on vacation? We'll water your plants while you're away.",
+                icon: "fa-seedling"
+            },
+            {
+                title: "Tech Help",
+                short: "$0–3",
+                details: "We can help with tech issues like remotes or phones.",
+                icon: "fa-mobile-screen-button"
+            },
+            {
+                title: "Mail & Package Pickup",
+                short: "$5/week",
+                details: "Secure collection of mail/packages.",
+                icon: "fa-box"
+            },
+            {
+                title: "Car Cleaning & Detailing",
+                short: "$50–125",
+                details: "Exterior wash is $50. Full detail ranges $75–125.",
+                icon: "fa-car"
+            },
+            {
+                title: "Custom Greeting Cards",
+                short: "$3–5 each",
+                details: "Hand-made cards for birthdays, holidays, and more.",
+                icon: "fa-credit-card"
+            },
+            {
+                title: "Painted Flower Pots or Jars",
+                short: "$5–10",
+                details: "We paint and decorate pots or jars you provide.",
+                icon: "fa-paint-brush"
+            },
+            {
+                title: "Bookmarks or Magnets",
+                short: "$1–3",
+                details: "Decorated items using your materials.",
+                icon: "fa-bookmark"
+            },
+            {
+                title: "SVG and Logo creation",
+                short: "$25-100",
+                details: "Custom SVG's or Logos for you or your company.",
+                icon: "fa-image"
+            },
+            {
+                title: "Website & Web App creation",
+                short: "$50-200",
+                details: "Custom Website/App creation.",
+                icon: "fa-code"
+            },
+            {
+                title: "Photo digitization",
+                short: "$0.50 ea",
+                details: "Digitize your physical or film photos.",
+                icon: "fa-solid fa-photo-film"
+            },
+            {
+                title: "Small 3D printing",
+                short: "$10-30",
+                details: "Extremely detailed 3D printing optimized for small prints.",
+                icon: "fa-solid fa-cube"
+            },
+            {
+                title: "Large 3D printing",
+                short: "$30-50",
+                details: "3D printing optimized for large prints.",
+                icon: "fa-solid fa-cubes"
+            },
+            {
+                title: "Flyer/poster creation",
+                short: "$10-30",
+                details: "Custom flyer/poster creation.",
+                icon: "fa-solid fa-file"
+            },
+            {
+                title: "Sticker creation",
+                short: "$2-10",
+                details: "Custom sticker creation.",
+                icon: "fa-solid fa-note-sticky"
+            },
+                        {
+                title: "Pressure washing",
+                short: "$30-80",
+                details: "Pressure washing for driveways/decks.",
+                icon: "fa-solid fa-droplet"
+            },
+                                    {
+                title: "The homework helper",
+                short: "$10",
+                details: "Help with students homework.",
+                icon: "fa-solid fa-book"
+            },
+                                                {
+                title: "Flash cards",
+                short: "$15 ea",
+                details: "Make flash cards for popular subjects or to help individuals study.",
+                icon: "fa-solid fa-clone"
+            },
+                                                {
+                title: "Bicycle repair",
+                short: "$25",
+                details: "Repair minor damages to your bicycle.",
+                icon: "fa-solid fa-bicycle"
+            },
+                                                {
+                title: "Custom art",
+                short: "$20",
+                details: "Custom artworks.",
+                icon: "fa-solid fa-palette"
+            },
+                                                {
+                title: "Videogame development",
+                short: "$20-50",
+                details: "Basic 2D videogame development.",
+                icon: "fa-solid fa-gamepad"
+            },
+                                                {
+                title: "Language translations",
+                short: "FREE",
+                details: "Language translation.",
+                icon: "fa-solid fa-language"
+            },
+                                                {
+                title: "Award creation",
+                short: "$10",
+                details: "Custom awards to celebrate any occasion.",
+                icon: "fa-solid fa-award"
+            },
+                                                {
+                title: "Digital music composition",
+                short: "$10",
+                details: "Help with students homework.",
+                icon: "fa-solid fa-music"
+            },
+                                                {
+                title: "POD",
+                short: "$20",
+                details: "Print on demand service for small batches.",
+                icon: "fa-solid fa-print"
+            },
+                                                {
+                title: "Code debugging",
+                short: "$25-50",
+                details: "Debug your code.",
+                icon: "fa-solid fa-bug-slash"
+            },
+            
+        ];
+        //Coupon on holiday
+        function isCouponDay() {
+            const today = new Date();
+            const holidays = [{
+                    name: "New Year's Day",
+                    match: d => d.getMonth() === 0 && d.getDate() === 1
+                },
+                {
+                    name: "MLK Jr. Day",
+                    match: d => d.getMonth() === 0 && d.getDate() >= 15 && d.getDate() <= 21
+                },
+                {
+                    name: "Washington's Birthday",
+                    match: d => d.getMonth() === 1 && d.getDate() >= 15 && d.getDate() <= 21
+                },
+                {
+                    name: "Memorial Day",
+                    match: d => d.getMonth() === 4 && d.getDate() >= 25 && d.getDate() <= 31
+                },
+                {
+                    name: "Juneteenth",
+                    match: d => d.getMonth() === 5 && d.getDate() === 19
+                },
+                {
+                    name: "Independence Day",
+                    match: d => d.getMonth() === 6 && d.getDate() === 4
+                },
+                {
+                    name: "Labor Day",
+                    match: d => d.getMonth() === 8 && d.getDate() >= 1 && d.getDate() <= 7
+                },
+                {
+                    name: "Columbus Day",
+                    match: d => d.getMonth() === 9 && d.getDate() >= 8 && d.getDate() <= 14
+                },
+                {
+                    name: "Veterans Day",
+                    match: d => d.getMonth() === 10 && d.getDate() === 11
+                },
+                {
+                    name: "Thanksgiving",
+                    match: d => d.getMonth() === 10 && d.getDate() >= 22 && d.getDate() <= 28
+                },
+                {
+                    name: "Christmas Day",
+                    match: d => d.getMonth() === 11 && d.getDate() === 25
+                }
+            ];
+            return holidays.find(h => h.match(today));
+        }
+
+        function getDiscountedText(text) {
+            const holiday = isCouponDay();
+            if (!holiday) return text;
+            const match = text.match(/\$(\d+(\.\d+)?)/);
+            if (!match) return text;
+            const original = parseFloat(match[1]);
+            if (original <= 10) return text;
+            const discounted = (original - 5).toFixed(2);
+            return `${text} <br><span style="color:green;font-weight:bold;">Today: $${discounted} with $5 off!</span>`;
+        }
+
+        function showCouponIfApplicable() {
+            const holiday = isCouponDay();
+            if (holiday && location.hash === '#home') {
+                const alert = document.getElementById('couponAlert');
+                alert.textContent = `🎉 Happy ${holiday.name}! Enjoy $5 off all services over $10 today only!`;
+                alert.style.display = 'block';
+            } else {
+                document.getElementById('couponAlert').style.display = 'none';
+            }
+        }
+        //Hash routing
+        function showPage(hash) {
+            document.querySelectorAll('main > section').forEach(sec => sec.style.display = 'none');
+            if (hash.startsWith('#service/')) {
+                const title = decodeURIComponent(hash.split('/')[1]);
+                const service = services.find(s => s.title === title);
+                const section = document.getElementById('servicePage');
+                section.innerHTML = service ? `
+<h2><i class="fas ${service.icon}"></i> ${service.title}</h2>
+<p><strong>Price:</strong> ${getDiscountedText(service.short)}</p>
+<p>${service.details}</p>
+<a href="#home" class="btn-back">← Return to Services</a>
+` : `<p>Service not found.</p>`;
+                section.style.display = 'block';
+            } else {
+                const id = hash.replace('#', '') || 'home';
+                const section = document.getElementById(id);
+                if (section) {
+                    section.style.display = 'block';
+                    showCouponIfApplicable();
+                }
+            }
+        }
+
+        function initServices() {
+            const grid = document.getElementById('serviceGrid');
+            services.forEach(service => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+<div class="icon"><i class="fas ${service.icon}"></i></div>
+<div>
+<div class="card-title">${service.title}</div>
+<div class="card-short">${getDiscountedText(service.short)}</div>
+</div>
+`;
+                card.onclick = () => location.hash = `#service/${encodeURIComponent(service.title)}`;
+                grid.appendChild(card);
+            });
+        }
+
+        function showPage(hash) {
+            document.querySelectorAll('main > section').forEach(sec => sec.style.display = 'none');
+            if (hash.startsWith('#service/')) {
+                const title = decodeURIComponent(hash.split('/')[1]);
+                const service = services.find(s => s.title === title);
+                const section = document.getElementById('servicePage');
+                section.innerHTML = service ? `
+<h2><i class="fas ${service.icon}"></i> ${service.title}</h2>
+<p><strong>Price:</strong> ${service.short}</p>
+<p>${service.details}</p>
+<p style=font-size:75%>Prices subject to change.</p>
+<button class="btn-book" onclick="bookService('${service.title}')">Book Service</button><br>
+<a href="#home" class="btn-back">← Return to Services</a>
+` : `<p>Service not found.</p>`;
+                section.style.display = 'block';
+            } else {
+                const id = hash.replace('#', '') || 'home';
+                const section = document.getElementById(id);
+                if (section) section.style.display = 'block';
+            }
+        }
+
+        function initRouter() {
+            window.addEventListener('hashchange', () => showPage(location.hash));
+            showPage(location.hash);
+        }
+        const storeItems = [{
+                    name: "Nerf Elite 2.0 cs-10 blaster",
+                    price: "$35",
+                    image: "https://m.media-amazon.com/images/I/51D6jTaSWNL._AC_UF894,1000_QL80_.jpg"
+                },
+                {
+                    name: "2x Nerf Elite Disruptor",
+                    price: "$25",
+                    image: "https://i.mmo.cm/is/image/mmoimg/bp-product-max/nerf-elite-disruptor-2x-pack--142713-1.jpg"
+                },
+                {
+                    name: "Bluetooth Wireless speaker",
+                    price: "$25",
+                    image: "https://m.media-amazon.com/images/I/718BUKFjwpL._AC_UF894,1000_QL80_.jpg"
+                },
+                {
+                    name: "'War Machine' by Andy Remic",
+                    price: "$10",
+                    image: "https://i5.walmartimages.com/asr/93161983-44c9-4f61-b599-801bd1ef21eb.5a6ffec79dd4c0eb5930c8eef09e420b.jpeg"
+                },
+                {
+                    name: "4-in-1 Nerf Metamorph blaster",
+                    price: "$30",
+                    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQww4ck52075ypX3z-5mlVEwp5mH-rHSdOVtQ&s"
+                },
+                {
+                    name: "Nerf DragonPower SkyBlaze bow",
+                    price: "$35",
+                    image: "https://i5.walmartimages.com/asr/9733e14e-173d-4265-b8eb-07337ceffcb7.5e4910d9e3f14d5c7147406e4cd4cb3f.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF"
+                },
+                {
+                    name: "'Brillancies' by Yasser Seirawan",
+                    price: "$15",
+                    image: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSm6gzQ3749q3XehLnXX9OpOG6Xlumk-ZReUkauuQ7iR0DyDoGC"
+                },
+                {
+                    name: "Coding projects in scratch",
+                    price: "$15",
+                    image: "https://m.media-amazon.com/images/I/61GQZ9QQh8L._AC_UF1000,1000_QL80_.jpg"
+                },
+                {
+                    name: "Coding games in scratch",
+                    price: "$15",
+                    image: "https://images.penguinrandomhouse.com/cover/9781465495020"
+                },
+                {
+                    name: "Wooden crossbow toy",
+                    price: "$20",
+                    image: "https://www.kroger.com/product/images/large/front/0084347912553"
+                },
+                {
+                    name: "Hovering RC helicopter toy",
+                    price: "$10",
+                    image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRfMz0_AVZctp9d3gsXiOLDqN1LXTb7FjtdFxxwXJO2ClS_zaymSxwtlfCQbImg7GOkxyjtp0uRgyttPPNG0VA4uXnxtg4mGtdSy5WpejK-dQ0PSBMo6oMzVQ"
+                },
+                {
+                    name: "Mongoose Spectra - REQUIRES WORK",
+                    price: "$50 OBO",
+                    image: "https://c.shld.net/rpx/i/s/i/spin/image/spin_prod_761153212"
+                },
+                {
+                    name: "King Arthur and his knights of the round table",
+                    price: "$10",
+                    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQXfmuDRvurncu3EsSPMR5zwU7odQ566Ch2QAQt8UTv_qdne47x_Srjietm9gEjQWLSE84EFFKS3NPnA1TW778TzW3N76xy5P6KimcafmLC_d-LKimzCo19"
+                },
+                {
+                name: "Tales of the Greek heroes",
+                price: "$10",
+                image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQWkLliy9j1CG1vPgcbqAn64tpCqFSHLCRu1uSUh-ea8CWrmr7-TOKs3P7xS7iKjxuUooTdqZ2O63s4Ey0CnfBFoOxhmn7FWYmxT5OG6HAiu-sTCYdl3SZ2"
+                },
+                {
+                name: "The adventures of Robin Hood",
+                price: "$10",
+                image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTvm-NM2KDIZIJaK-6CK3j1spq25Kjm3OaRHxdlTqV_eV7Tqel4tCxNyQWf5aKDZkugGX8PlTew9NxP_Rn-n3vajkKxeb9wbdI0pVgBnlq2RdvhbKi9SueNsA"
+                },
+                            {
+                name: "SpyX Lazer alarm trap",
+                price: "$20",
+                image: "https://shop.spyscape.com/cdn/shop/products/laser1.png?v=1587097632"
+            },
+        // Add more products as needed
+        ];
+
+        function initServices() {
+            const grid = document.getElementById('serviceGrid');
+            services.forEach(service => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+<div class="icon"><i class="fas ${service.icon}"></i></div>
+<div>
+<div class="card-title">${service.title}</div>
+<div class="card-short">${service.short}</div>
+</div>
+`;
+                card.onclick = () => location.hash = `#service/${encodeURIComponent(service.title)}`;
+                grid.appendChild(card);
+            });
+        }
+
+        function initStore() {
+            const grid = document.getElementById('storeGrid');
+            grid.innerHTML = '';
+            storeItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'storecard';
+                card.innerHTML = `
+<img src="${item.image}" alt="${item.name}" width="100%">
+<h1>${item.name}</h1>
+<p class="price">${item.price}</p>
+<p><button onclick="buyProduct('${item.name}', '${item.price}')">Buy</button></p>
+`;
+                grid.appendChild(card);
+            });
+        }
+
+        function bookService(serviceName) {
+            location.hash = '#contact';
+            setTimeout(() => {
+                const messageBox = document.querySelector('.contact-form textarea');
+                if (messageBox) messageBox.value = `I'm interested in booking: ${serviceName}`;
+            }, 100);
+        }
+
+        function initForm() {
+            const form = document.querySelector('.contact-form');
+            const status = document.getElementById('formStatus');
+            form.addEventListener('submit', function(e) {
+                status.textContent = "Sending...";
+                setTimeout(() => {
+                    status.textContent = "Message sent! We'll be in touch soon.";
+                    form.reset();
+                }, 1500);
+            });
+        }
+
+        function buyProduct(name, price) {
+            location.hash = '#contact';
+            setTimeout(() => {
+                const messageBox = document.querySelector('.contact-form textarea');
+                if (messageBox) {
+                    messageBox.value = `I would like to buy ${name} for ${price}.`;
+                }
+            }, 200); // delay ensures page has loaded
+        }
+
+        function closeAutoFillForm() {
+            document.getElementById("autoFillForm").classList.remove("show");
+        }
+        const storeGrid = document.getElementById('storeGrid');
+        storeItems.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'storecard';
+            card.innerHTML = `
+<img src="${item.image}" alt="${item.name}">
+<h1>${item.name}</h1>
+<p class="price">${item.price}</p>
+<button onclick="buyProduct('${item.name}', '${item.price}')">Buy</button>
+`;
+            storeGrid.appendChild(card);
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+            initServices();
+            initStore();
+            initRouter();
+            initForm();
+        });
+    </script>
+</body>
+
+</html>
