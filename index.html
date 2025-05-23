@@ -169,6 +169,35 @@
             margin-top: 1em;
             font-weight: bold;
         }
+                .donate-form input,
+                .donate-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+
+        .donate-form button {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .donate-form button:hover {
+            background: #444;
+        }
+
+        .form-status {
+            text-align: center;
+            margin-top: 1em;
+            font-weight: bold;
+        }
 
         footer p a {
             color: #ccc;
@@ -483,6 +512,16 @@
                 <button type="submit">Send Message</button>
                 <div class="form-status" id="formStatus"></div>
             </form>
+        </section>
+        <section>
+            <form class="donate-form" action="https://formspree.io/f/mldblrrq" method="POST">
+                <input type="text" name="name" placeholder="Your Name" required />
+                <input type="text" name="amount" placeholder="How much would you like to donate?" required />
+                <input type="text" name="address" placeholder="Your address" required />
+                <input type="hidden" name="_subject" value="Donation!" />
+                <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
+                <button type="submit">Donate</button>
+                <div class="form-status" id="formStatus"></div>
         </section>
         <section id="goals" class="goal-page">
             <h2>Our Goal</h2>
