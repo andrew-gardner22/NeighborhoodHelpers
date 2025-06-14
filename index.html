@@ -37,6 +37,22 @@
             z-index: 1000;
             text-decoration: none;
             transition: transform 0.4s ease, opacity 0.4s ease;
+            animation: tilt-shaking 5s infinite;
+        }
+
+        @keyframes tilt-shaking {
+
+            0% {
+                transform: rotate(5deg);
+            }
+
+            50% {
+                transform: rotate(-5deg);
+            }
+
+            100% {
+                transform: rotate(5deg);
+            }
         }
 
         .logo-link.hide {
@@ -86,12 +102,12 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
 
         /* Force 2 columns on smallest screens */
-        @media (max-width: 480px) {
+        @media (max-width: 700px) {
             .grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -161,35 +177,6 @@
         }
 
         .contact-form button:hover {
-            background: #444;
-        }
-
-        .form-status {
-            text-align: center;
-            margin-top: 1em;
-            font-weight: bold;
-        }
-                .donate-form input,
-                .donate-form textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-        }
-
-        .donate-form button {
-            background: #222;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-        }
-
-        .donate-form button:hover {
             background: #444;
         }
 
@@ -271,10 +258,12 @@
         }
 
         /* Handshake float-and-spin-in */
-        @keyframes float-and-spin {
+        @keyframes fly-to-logo {
             0% {
-                transform: scale(0.5) translateY(0) rotate(0deg);
-                opacity: 0;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.8) opacity: 0;
+                transform: rotate(0deg);
             }
 
             50% {
@@ -282,21 +271,36 @@
             }
 
             100% {
-                transform: scale(0.75) translate(-800px, -420px) rotate(720deg);
+                top: 30px;
+                left: 30px;
+                transform: scale(1);
                 opacity: 1;
+                transform: rotate(1080deg);
             }
+        }
+
+        .loader-logo {
+            position: fixed;
+            font-size: 5em;
+            color: white;
+            opacity: 0;
+            z-index: 3000;
+            transform: translate(0, 0);
+            /* ✅ add this line */
+        }
+
+        /* Added spin animation for loader-logo */
+        .loader-logo.spin-custom {
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-logo.animate-in {
+            animation: fly-to-logo 1.5s ease-out forwards;
+            will-change: transform, top, left;
         }
 
         .loader-icon.spin-out {
             animation: fade-and-scale-out 0.8s ease forwards;
-        }
-
-        .loader-logo {
-            opacity: 0;
-        }
-
-        .loader-logo.animate-in {
-            animation: float-and-spin 1.5s ease forwards;
         }
 
         .spin-custom {
@@ -313,7 +317,7 @@
             }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             nav {
                 flex-direction: column;
                 gap: 1em;
@@ -327,11 +331,11 @@
             padding: 20px;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 700px) {
             #storeGrid {
                 grid-template-columns: repeat(3, 1fr);
             }
-        } 
+        }
 
         .storecard {
             background: #fff;
@@ -454,7 +458,8 @@
             font-size: 1.1em;
             border-bottom: 2px solid #ccc;
         }
-                @media (max-width: 480px) {
+
+        @media (max-width: 700px) {
             header h1 {
                 font-size: 1.2em;
             }
@@ -471,6 +476,185 @@
                 top: 15px;
                 left: 15px;
             }
+        }
+
+        @media (max-width: 800px) {
+
+            .logo,
+            .logo-icon,
+            .logo-link,
+            .loader-logo {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 700px) {
+            header h1 {
+                font-size: 1.4em;
+            }
+
+            header p {
+                font-size: 1em;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+
+            .card-title {
+                font-size: 1em;
+            }
+
+            .storecard h1 {
+                font-size: 1em;
+            }
+
+            nav a {
+                font-size: 1em;
+                padding: 0.5em 0;
+            }
+
+            .card,
+            .storecard {
+                padding: 0.8em;
+            }
+
+            .card .icon {
+                font-size: 1.5em;
+            }
+
+            .logo-icon {
+                font-size: 2.5em;
+            }
+
+            .logo-link {
+                top: 10px;
+                left: 10px;
+            }
+
+            .contact-form input,
+            .contact-form textarea,
+            .contact-form button,
+            .donate-form input,
+            .donate-form button {
+                font-size: 0.95em;
+                padding: 10px;
+            }
+
+            #storeGrid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 25% auto;
+            }
+
+            .btn-book,
+            .btn-back {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1em;
+            }
+
+            nav a {
+                font-size: 1em;
+                padding: 0.6em 1em;
+                flex-shrink: 0;
+            }
+
+            /* Donate Button - responsive placement */
+            .modal-open {
+                position: fixed;
+                bottom: 15px;
+                right: 15px;
+                font-size: 2em;
+                padding: 10px;
+                z-index: 999;
+                background: none;
+            }
+
+            /* Modal Box */
+            .modal-content {
+                width: 90% !important;
+                margin: 25% auto;
+                padding: 1em;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 1px;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            header,
+            footer {
+                min-height: unset;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            header,
+            footer {
+                padding: 0.75em 1em;
+            }
+
+            header h1 {
+                font-size: 1.1em;
+                margin: 0.2em 0;
+            }
+
+            header p {
+                font-size: 0.85em;
+                margin: 0.2em 0;
+            }
+
+            footer p {
+                font-size: 0.75em;
+                margin: 0.3em 0;
+            }
+
+            footer p a {
+                font-size: 0.8em;
+            }
+
+            footer {
+                line-height: 1.3em;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .modal-open {
+                display: none;
+            }
+
+            .modal-open i {
+                font-size: clamp(1.5rem, 6vw, 2rem);
+            }
+        }
+
+        body .modal-open {
+            font-size: clamp(1.2rem, 5vw, 1.6rem) !important;
+        }
+
+        @media (max-width: 700px) {
+            .loader-logo {
+                font-size: 2.5em;
+            }
+
         }
     </style>
 </head>
@@ -513,16 +697,6 @@
                 <div class="form-status" id="formStatus"></div>
             </form>
         </section>
-        <section>
-            <form class="donate-form" action="https://formspree.io/f/mldblrrq" method="POST">
-                <input type="text" name="name" placeholder="Your Name" required />
-                <input type="text" name="amount" placeholder="How much would you like to donate?" required />
-                <input type="text" name="address" placeholder="Your address" required />
-                <input type="hidden" name="_subject" value="Donation!" />
-                <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
-                <button type="submit">Donate</button>
-                <div class="form-status" id="formStatus"></div>
-        </section>
         <section id="goals" class="goal-page">
             <h2>Our Goal</h2>
             <p>We’re working to raise $2,000 over the summer. Every service booked helps us reach that goal—thank you!</p>
@@ -535,21 +709,183 @@
         </section>
     </main>
     <footer>
-        <p>© 2025 Neighborhood Helpers Services | Contact: <a href="mailto:andygardner222@gmail.com">Andrew</a> & <a href="mailto:logangardner301@gmail.com">Logan</a></p>
+        <p>
+            © 2025 Neighborhood Helpers Services | Contact: <a href="mailto:andygardner222@gmail.com">Andrew</a> & <a href="mailto:logangardner301@gmail.com">Logan</a>
+        </p>
         <p style="font-size:75%">Please note not all locations in service area</p>
+        <style>
+            .modal {
+                display: none;
+                /* Hidden by default */
+                position: fixed;
+                /* Stay in place */
+                z-index: 1;
+                /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%;
+                /* Full width */
+                height: 100%;
+                /* Full height */
+                overflow: auto;
+                /* Enable scroll if needed */
+                background-color: rgba(0, 0, 0, 0.4);
+                /* Black w/ opacity */
+            }
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto;
+                /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 35%;
+                /* Could be more or less, depending on screen size */
+            }
+
+            .modal-close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .modal-close:hover,
+            .modal-close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .modal-open {
+                background: #222;
+                position: absolute;
+                bottom: 35px;
+                right: 20px;
+                border: none;
+                font-size: 2em;
+                animation: pulse 1.5s infinite;
+            }
+
+            @keyframes bounce {
+
+                0%,
+                20%,
+                50%,
+                80%,
+                100% {
+                    transform: translateY(0);
+                }
+
+                40% {
+                    transform: translateY(-20px);
+                }
+
+                60% {
+                    transform: translateY(-7.5px);
+                }
+            }
+
+            .modal-open :hover {
+                animation: bounce 0.75s;
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.1);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
+            }
+        </style>
+
+        <button class="modal-open" id="openModal"><i class="fa-solid fa-piggy-bank fa-2xl" style="color: #ffffff;"></i></button>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <h2>Donate</h2>
+                <form class="donate-form" action="https://formspree.io/f/mldblrrq" method="POST">
+                    <input type="text" name="address" placeholder="Your Address" required />
+                    <input type="number" name="amount" placeholder="Donation Amount" required />
+                    <input type="hidden" name="_subject" value="New Donation!" />
+                    <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
+                    <button type="submit">Donate</button>
+                    <div class="form-status" id="formStatus"></div>
+                </form>
+            </div>
+        </div>
+        <style>
+            .donate-form input,
+            .donate-form number {
+                width: 95%;
+                padding: 12px;
+                margin: 10px 0;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                font-size: 1em;
+            }
+
+            .donate-form button {
+                background: #222;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 5px;
+                font-size: 1em;
+                cursor: pointer;
+            }
+
+            .donate-form button:hover {
+                background: #444;
+            }
+        </style>
+
+        <script>
+            var modal = document.getElementById("modal");
+            var btn = document.getElementById("openModal");
+            var span = document.getElementsByClassName("modal-close")[0];
+
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
+
     </footer>
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const loader = document.getElementById('loader');
             const spinner = loader.querySelector('.loader-icon');
             const logo = loader.querySelector('.loader-logo');
+
             setTimeout(() => {
-                // animate spinner out
                 spinner.classList.add('spin-out');
-                // animate handshake in
                 logo.classList.remove('hidden');
                 logo.classList.add('animate-in');
-                // fade out loader container
+
+                logo.addEventListener('animationend', () => {
+                    // Add continuous spin after fly-to-logo finishes
+                    logo.classList.add('spin-custom');
+                }, {
+                    once: true
+                }); // To run this handler once only
+
                 setTimeout(() => {
                     loader.style.opacity = 0;
                     setTimeout(() => loader.remove(), 1000);
@@ -563,7 +899,7 @@
                 icon: "fa-trash"
             },
             {
-                title: "Light or Heavy Yard Work",
+                title: "Lawncare",
                 short: "$15–50",
                 details: "Includes mowing, weeding, raking. Price depends on complexity.",
                 icon: "fa-leaf"
@@ -658,73 +994,73 @@
                 details: "Custom sticker creation.",
                 icon: "fa-solid fa-note-sticky"
             },
-                        {
+            {
                 title: "Pressure washing",
                 short: "$30-80",
                 details: "Pressure washing for driveways/decks.",
                 icon: "fa-solid fa-droplet"
             },
-                                    {
+            {
                 title: "The homework helper",
                 short: "$10",
                 details: "Help with students homework.",
                 icon: "fa-solid fa-book"
             },
-                                                {
+            {
                 title: "Flash cards",
                 short: "$15 ea",
                 details: "Make flash cards for popular subjects or to help individuals study.",
                 icon: "fa-solid fa-clone"
             },
-                                                {
+            {
                 title: "Bicycle repair",
                 short: "$25",
                 details: "Repair minor damages to your bicycle.",
                 icon: "fa-solid fa-bicycle"
             },
-                                                {
+            {
                 title: "Custom art",
                 short: "$20",
                 details: "Custom artworks.",
                 icon: "fa-solid fa-palette"
             },
-                                                {
+            {
                 title: "Videogame development",
                 short: "$20-50",
                 details: "Basic 2D videogame development.",
                 icon: "fa-solid fa-gamepad"
             },
-                                                {
+            {
                 title: "Language translations",
                 short: "FREE",
                 details: "Language translation.",
                 icon: "fa-solid fa-language"
             },
-                                                {
+            {
                 title: "Award creation",
                 short: "$10",
                 details: "Custom awards to celebrate any occasion.",
                 icon: "fa-solid fa-award"
             },
-                                                {
+            {
                 title: "Digital music composition",
                 short: "$10",
                 details: "Help with students homework.",
                 icon: "fa-solid fa-music"
             },
-                                                {
+            {
                 title: "POD",
                 short: "$20",
                 details: "Print on demand service for small batches.",
                 icon: "fa-solid fa-print"
             },
-                                                {
+            {
                 title: "Code debugging",
                 short: "$25-50",
                 details: "Debug your code.",
                 icon: "fa-solid fa-bug-slash"
             },
-            
+
         ];
         //Coupon on holiday
         function isCouponDay() {
@@ -780,7 +1116,7 @@
         function getDiscountedText(text) {
             const holiday = isCouponDay();
             if (!holiday) return text;
-            const match = text.match(/\$(\d+(\.\d+)?)/);
+            const match = text.match(/\\$(\\d+(\\.\\d+)?)/);
             if (!match) return text;
             const original = parseFloat(match[1]);
             if (original <= 10) return text;
@@ -834,10 +1170,16 @@
 <div class="card-short">${getDiscountedText(service.short)}</div>
 </div>
 `;
-                card.onclick = () => location.hash = `#service/${encodeURIComponent(service.title)}`;
+                // Custom behavior for Lawncare card
+                if (service.title.toLowerCase() === "lawncare") {
+                    card.onclick = () => window.location.href = "https://andrew-gardner22.github.io/rrlawncare/";
+                } else {
+                    card.onclick = () => location.hash = `#service/${encodeURIComponent(service.title)}`;
+                }
                 grid.appendChild(card);
             });
         }
+
 
         function showPage(hash) {
             document.querySelectorAll('main > section').forEach(sec => sec.style.display = 'none');
@@ -866,104 +1208,87 @@
             showPage(location.hash);
         }
         const storeItems = [{
-                    name: "Nerf Elite 2.0 cs-10 blaster",
-                    price: "$35",
-                    image: "https://m.media-amazon.com/images/I/51D6jTaSWNL._AC_UF894,1000_QL80_.jpg"
-                },
-                {
-                    name: "2x Nerf Elite Disruptor",
-                    price: "$25",
-                    image: "https://i.mmo.cm/is/image/mmoimg/bp-product-max/nerf-elite-disruptor-2x-pack--142713-1.jpg"
-                },
-                {
-                    name: "Bluetooth Wireless speaker",
-                    price: "$25",
-                    image: "https://m.media-amazon.com/images/I/718BUKFjwpL._AC_UF894,1000_QL80_.jpg"
-                },
-                {
-                    name: "'War Machine' by Andy Remic",
-                    price: "$10",
-                    image: "https://i5.walmartimages.com/asr/93161983-44c9-4f61-b599-801bd1ef21eb.5a6ffec79dd4c0eb5930c8eef09e420b.jpeg"
-                },
-                {
-                    name: "4-in-1 Nerf Metamorph blaster",
-                    price: "$30",
-                    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQww4ck52075ypX3z-5mlVEwp5mH-rHSdOVtQ&s"
-                },
-                {
-                    name: "Nerf DragonPower SkyBlaze bow",
-                    price: "$35",
-                    image: "https://i5.walmartimages.com/asr/9733e14e-173d-4265-b8eb-07337ceffcb7.5e4910d9e3f14d5c7147406e4cd4cb3f.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF"
-                },
-                {
-                    name: "'Brillancies' by Yasser Seirawan",
-                    price: "$15",
-                    image: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSm6gzQ3749q3XehLnXX9OpOG6Xlumk-ZReUkauuQ7iR0DyDoGC"
-                },
-                {
-                    name: "Coding projects in scratch",
-                    price: "$15",
-                    image: "https://m.media-amazon.com/images/I/61GQZ9QQh8L._AC_UF1000,1000_QL80_.jpg"
-                },
-                {
-                    name: "Coding games in scratch",
-                    price: "$15",
-                    image: "https://images.penguinrandomhouse.com/cover/9781465495020"
-                },
-                {
-                    name: "Wooden crossbow toy",
-                    price: "$20",
-                    image: "https://www.kroger.com/product/images/large/front/0084347912553"
-                },
-                {
-                    name: "Hovering RC helicopter toy",
-                    price: "$10",
-                    image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRfMz0_AVZctp9d3gsXiOLDqN1LXTb7FjtdFxxwXJO2ClS_zaymSxwtlfCQbImg7GOkxyjtp0uRgyttPPNG0VA4uXnxtg4mGtdSy5WpejK-dQ0PSBMo6oMzVQ"
-                },
-                {
-                    name: "Mongoose Spectra - REQUIRES WORK",
-                    price: "$50 OBO",
-                    image: "https://c.shld.net/rpx/i/s/i/spin/image/spin_prod_761153212"
-                },
-                {
-                    name: "King Arthur and his knights of the round table",
-                    price: "$10",
-                    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQXfmuDRvurncu3EsSPMR5zwU7odQ566Ch2QAQt8UTv_qdne47x_Srjietm9gEjQWLSE84EFFKS3NPnA1TW778TzW3N76xy5P6KimcafmLC_d-LKimzCo19"
-                },
-                {
+                name: "Nerf Elite 2.0 cs-10 blaster",
+                price: "$35",
+                image: "https://m.media-amazon.com/images/I/51D6jTaSWNL._AC_UF894,1000_QL80_.jpg"
+            },
+            {
+                name: "2x Nerf Elite Disruptor",
+                price: "$25",
+                image: "https://i.mmo.cm/is/image/mmoimg/bp-product-max/nerf-elite-disruptor-2x-pack--142713-1.jpg"
+            },
+            {
+                name: "Bluetooth Wireless speaker",
+                price: "$25",
+                image: "https://m.media-amazon.com/images/I/718BUKFjwpL._AC_UF894,1000_QL80_.jpg"
+            },
+            {
+                name: "'War Machine' by Andy Remic",
+                price: "$10",
+                image: "https://i5.walmartimages.com/asr/93161983-44c9-4f61-b599-801bd1ef21eb.5a6ffec79dd4c0eb5930c8eef09e420b.jpeg"
+            },
+            {
+                name: "4-in-1 Nerf Metamorph blaster",
+                price: "$30",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQww4ck52075ypX3z-5mlVEwp5mH-rHSdOVtQ&s"
+            },
+            {
+                name: "Nerf DragonPower SkyBlaze bow",
+                price: "$35",
+                image: "https://i5.walmartimages.com/asr/9733e14e-173d-4265-b8eb-07337ceffcb7.5e4910d9e3f14d5c7147406e4cd4cb3f.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF"
+            },
+            {
+                name: "'Brillancies' by Yasser Seirawan",
+                price: "$15",
+                image: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSm6gzQ3749q3XehLnXX9OpOG6Xlumk-ZReUkauuQ7iR0DyDoGC"
+            },
+            {
+                name: "Coding projects in scratch",
+                price: "$15",
+                image: "https://m.media-amazon.com/images/I/61GQZ9QQh8L._AC_UF1000,1000_QL80_.jpg"
+            },
+            {
+                name: "Coding games in scratch",
+                price: "$15",
+                image: "https://images.penguinrandomhouse.com/cover/9781465495020"
+            },
+            {
+                name: "Wooden crossbow toy",
+                price: "$20",
+                image: "https://www.kroger.com/product/images/large/front/0084347912553"
+            },
+            {
+                name: "Hovering RC helicopter toy",
+                price: "$10",
+                image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRfMz0_AVZctp9d3gsXiOLDqN1LXTb7FjtdFxxwXJO2ClS_zaymSxwtlfCQbImg7GOkxyjtp0uRgyttPPNG0VA4uXnxtg4mGtdSy5WpejK-dQ0PSBMo6oMzVQ"
+            },
+            {
+                name: "Mongoose Spectra - REQUIRES WORK",
+                price: "$50 OBO",
+                image: "https://c.shld.net/rpx/i/s/i/spin/image/spin_prod_761153212"
+            },
+            {
+                name: "King Arthur and his knights of the round table",
+                price: "$10",
+                image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQXfmuDRvurncu3EsSPMR5zwU7odQ566Ch2QAQt8UTv_qdne47x_Srjietm9gEjQWLSE84EFFKS3NPnA1TW778TzW3N76xy5P6KimcafmLC_d-LKimzCo19"
+            },
+            {
                 name: "Tales of the Greek heroes",
                 price: "$10",
                 image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQWkLliy9j1CG1vPgcbqAn64tpCqFSHLCRu1uSUh-ea8CWrmr7-TOKs3P7xS7iKjxuUooTdqZ2O63s4Ey0CnfBFoOxhmn7FWYmxT5OG6HAiu-sTCYdl3SZ2"
-                },
-                {
+            },
+            {
                 name: "The adventures of Robin Hood",
                 price: "$10",
                 image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTvm-NM2KDIZIJaK-6CK3j1spq25Kjm3OaRHxdlTqV_eV7Tqel4tCxNyQWf5aKDZkugGX8PlTew9NxP_Rn-n3vajkKxeb9wbdI0pVgBnlq2RdvhbKi9SueNsA"
-                },
-                            {
+            },
+            {
                 name: "SpyX Lazer alarm trap",
                 price: "$20",
                 image: "https://shop.spyscape.com/cdn/shop/products/laser1.png?v=1587097632"
             },
-        // Add more products as needed
+            // Add more products as needed
         ];
-
-        function initServices() {
-            const grid = document.getElementById('serviceGrid');
-            services.forEach(service => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-<div class="icon"><i class="fas ${service.icon}"></i></div>
-<div>
-<div class="card-title">${service.title}</div>
-<div class="card-short">${service.short}</div>
-</div>
-`;
-                card.onclick = () => location.hash = `#service/${encodeURIComponent(service.title)}`;
-                grid.appendChild(card);
-            });
-        }
 
         function initStore() {
             const grid = document.getElementById('storeGrid');
