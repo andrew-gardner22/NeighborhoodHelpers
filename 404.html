@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>404 Not Found</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background-color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: #fff;
+  }
+  .container {
+    text-align: center;
+  }
+  h1 {
+    font-size: 6em;
+    margin: 0;
+  }
+  p {
+    font-size: 1.5em;
+  }
+  /* Style for the button */
+  .button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  .button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>404</h1>
+    <p>Page not found</p>
+    <button class="button" id="toSite">To Site</button>
+  </div>
+  <script>
+    // Add event listener to the button
+    document.getElementById('toSite').addEventListener('click', function() {
+      window.location.href = 'https://andrew-gardner22.github.io/NeighborhoodHelpers/';
+    });
+  </script>
+</body>
+</html>
