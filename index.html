@@ -677,8 +677,25 @@
         <a href="#contact">Contact</a>
         <a href="#goals">Goals</a>
         <a href="#store">Store</a>
+        <a href="#donate">Donate</a>
     </nav>
     <main>
+        <section id="donate">
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <h2>Donate</h2>
+                <form class="donate-form" action="https://formspree.io/f/mldblrrq" method="POST">
+                    <input type="text" name="address" placeholder="Your Address" required />
+                    <input type="number" name="amount" placeholder="Donation Amount" required />
+                    <input type="hidden" name="_subject" value="New Donation!" />
+                    <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
+                    <button type="submit">Donate</button>
+                    <div class="form-status" id="formStatus"></div>
+                </form>
+            </div>
+        </div>
+        </section>
         <section id="home">
             <h2>Services We Offer</h2>
             <div class="grid" id="serviceGrid"></div>
@@ -699,7 +716,7 @@
         </section>
         <section id="goals" class="goal-page">
             <h2>Our Goal</h2>
-            <p>We’re working to raise $2,000 over the summer. Every service booked helps us reach that goal—thank you!</p>
+            <p>We’re working to raise $2,000. Every service booked helps us reach that goal—thank you!</p>
             <p>Can't find a service you're looking for? Let us know! We're here to help</p>
         </section>
         <section id="store" class="storefront">
@@ -977,12 +994,6 @@
                 icon: "fa-solid fa-cube"
             },
             {
-                title: "Large 3D printing",
-                short: "$30-50",
-                details: "3D printing optimized for large prints.",
-                icon: "fa-solid fa-cubes"
-            },
-            {
                 title: "Flyer/poster creation",
                 short: "$10-30",
                 details: "Custom flyer/poster creation.",
@@ -1001,21 +1012,9 @@
                 icon: "fa-solid fa-droplet"
             },
             {
-                title: "The homework helper",
-                short: "$10",
-                details: "Help with students homework.",
-                icon: "fa-solid fa-book"
-            },
-            {
-                title: "Flash cards",
-                short: "$15 ea",
-                details: "Make flash cards for popular subjects or to help individuals study.",
-                icon: "fa-solid fa-clone"
-            },
-            {
                 title: "Bicycle repair",
                 short: "$25",
-                details: "Repair minor damages to your bicycle.",
+                details: "Repair MINOR damages to your bicycle.",
                 icon: "fa-solid fa-bicycle"
             },
             {
@@ -1050,7 +1049,7 @@
             },
             {
                 title: "POD",
-                short: "$20",
+                short: "$2-30",
                 details: "Print on demand service for small batches.",
                 icon: "fa-solid fa-print"
             },
