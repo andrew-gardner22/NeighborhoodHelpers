@@ -735,6 +735,75 @@
       <h2>Store</h2>
       <div class="store-grid" id="storeGrid">
       </div>
+      <!-- Drop-in Temporarily Disabled Store Overlay -->
+<div id="store-disabled-overlay">
+  <style>
+    /* target only when the URL hash is exactly #store */
+    #store-disabled-overlay {
+      display: none;
+    }
+    body:has(#store:target) #store-disabled-overlay, /* If store has an ID matching hash */
+    html:has(a[href="#store"]:target) #store-disabled-overlay { /* Fallback for hash routing */
+      display: block;
+    }
+    
+    /* Global override when active to block the store */
+    @media screen {
+      html:has(:target[id="store"]) #store-disabled-overlay {
+        display: flex !important;
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(4px);
+        z-index: 99999;
+        align-items: center;
+        justify-content: center;
+        pointer-events: auto;
+      }
+    }
+
+    /* Modal box styling */
+    .disabled-modal-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 400px;
+      font-family: sans-serif;
+    }
+    .disabled-modal-card h2 { margin-top: 0; color: #333; }
+    .disabled-modal-card p { color: #666; margin-bottom: 0; }
+  </style>
+
+  <!-- Modal content markup -->
+  <div class="disabled-modal-card">
+    <h2>Store Temporarily Offline</h2>
+    <p>We are currently updating our inventory. Please check back shortly!</p>
+  </div>
+
+  <!-- Auto-initializer script for older browsers or strict SPA routers -->
+  <script>
+    (function() {
+      function checkStoreHash() {
+        const overlay = document.getElementById('store-disabled-overlay');
+        if (window.location.hash === '#store') {
+          overlay.style.cssText = 'display: flex !important; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center;';
+          // Trap pointer events globally
+          document.body.style.pointerEvents = 'none';
+          overlay.style.pointerEvents = 'auto';
+        } else {
+          overlay.style.display = 'none';
+          document.body.style.pointerEvents = 'auto';
+        }
+      }
+      window.addEventListener('hashchange', checkStoreHash);
+      window.addEventListener('DOMContentLoaded', checkStoreHash);
+      checkStoreHash(); // Run immediately
+    })();
+  </script>
+</div>
+
     </section>
   </main>
   <footer>
