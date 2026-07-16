@@ -1,681 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Neighborhood Helpers</title>
   
-    <!-- Favicon for Light Mode -->
   <link rel="icon" type="image/png" href="favicon-32x32.png" media="(prefers-color-scheme: light)">
-  
-  <!-- Favicon for Dark Mode -->
   <link rel="icon" type="image/png" href="favicon-32x32_dark.png" media="(prefers-color-scheme: dark)">
   
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <style>
-    html,
-    body {
-        height: 100%;
-    }
-    
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f7f7f7;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    header,
-    footer {
-        background-color: #222;
-        color: white;
-        text-align: center;
-        padding: 1.2em;
-        position: relative;
-    }
-    
-    .logo-link {
-        position: absolute;
-        top: 30px;
-        left: 30px;
-        z-index: 1000;
-        text-decoration: none;
-        transition: transform 0.4s ease, opacity 0.4s ease;
-        animation: tilt-shaking 5s infinite;
-    }
-    
-    @keyframes tilt-shaking {
-    
-        0% {
-            transform: rotate(5deg);
-        }
-    
-        50% {
-            transform: rotate(-5deg);
-        }
-    
-        100% {
-            transform: rotate(5deg);
-        }
-    }
-    
-    .logo-link.hide {
-        transform: translateY(-100px);
-        opacity: 0;
-        pointer-events: none;
-    }
-    
-    .logo-icon {
-        font-size: 5em;
-        color: white;
-        transition: transform 0.2s ease, font-size 0.3s ease;
-    }
-    
-    .logo-icon:hover {
-        transform: scale(1.2) rotate(-5deg);
-    }
-    
-    nav {
-        background: #333;
-        display: flex;
-        justify-content: center;
-        gap: 2em;
-        padding: 1em;
-        flex-wrap: wrap;
-    }
-    
-    nav a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    
-    nav a:hover {
-        text-decoration: underline;
-    }
-    
-    main {
-        flex: 1;
-        padding: 2em;
-    }
-    
-    h2 {
-        margin-top: 2em;
-        color: #222;
-    }
-    
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-    }
-    
-    /* Force 2 columns on smallest screens */
-    @media (max-width: 700px) {
-        .grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    
-    .card {
-        background: white;
-        padding: 1.2em;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease;
-        cursor: pointer;
-        display: flex;
-        gap: 0.8em;
-        align-items: flex-start;
-        flex-direction: column;
-    }
-    
-    .card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .card .icon {
-        font-size: 1.8em;
-        color: #444;
-    }
-    
-    .card-title {
-        font-weight: bold;
-        font-size: 1.1em;
-        margin-bottom: 0.3em;
-    }
-    
-    .card-short {
-        color: #555;
-    }
-    
-    .service-page,
-    .contact-page,
-    .goal-page {
-        display: none;
-        background: white;
-        padding: 2em;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        margin-top: 2em;
-    }
-    
-    .contact-form input,
-    .contact-form textarea {
-        width: 100%;
-        padding: 12px;
-        margin: 10px 0;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        font-size: 1em;
-    }
-    
-    .contact-form button {
-        background: #222;
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 5px;
-        font-size: 1em;
-        cursor: pointer;
-    }
-    
-    .contact-form button:hover {
-        background: #444;
-    }
-    
-    .form-status {
-        text-align: center;
-        margin-top: 1em;
-        font-weight: bold;
-    }
-    
-    footer p a {
-        color: #ccc;
-    }
-    
-    .btn-back {
-        display: inline-block;
-        margin-top: 1em;
-        background: #eee;
-        padding: 10px 16px;
-        border-radius: 6px;
-        text-decoration: none;
-        color: #333;
-        font-weight: bold;
-        transition: background 0.2s ease;
-    }
-    
-    .btn-back:hover {
-        background: #ddd;
-    }
-    
-    .btn-book {
-        margin-top: 1em;
-        background: #007BFF;
-        color: white;
-        padding: 10px 16px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    
-    .btn-book:hover {
-        background: #0056b3;
-    }
-    
-    /* Loader Styles */
-    #loader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #222;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-        opacity: 1;
-        transition: opacity 0.5s ease;
-    }
-    
-    .loader-icon,
-    .loader-logo {
-        position: absolute;
-        font-size: 7em;
-        color: white;
-    }
-    
-    /* Spinner fade-and-scale-out */
-    @keyframes fade-and-scale-out {
-        0% {
-            opacity: 1;
-            transform: scale(1) rotate(0deg);
-        }
-    
-        100% {
-            opacity: 0;
-            transform: scale(0.3) rotate(360deg);
-        }
-    }
-    
-    /* Handshake float-and-spin-in */
-    @keyframes fly-to-logo {
-        0% {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8) opacity: 0;
-            transform: rotate(0deg);
-        }
-    
-        50% {
-            opacity: 1;
-        }
-    
-        100% {
-            top: 30px;
-            left: 30px;
-            transform: scale(1);
-            opacity: 1;
-            transform: rotate(1080deg);
-        }
-    }
-    
-    .loader-logo {
-        position: fixed;
-        font-size: 5em;
-        color: white;
-        opacity: 0;
-        z-index: 3000;
-        transform: translate(0, 0);
-        /* ✅ add this line */
-    }
-    
-    /* Added spin animation for loader-logo */
-    .loader-logo.spin-custom {
-        animation: spin 1s linear infinite;
-    }
-    
-    .loader-logo.animate-in {
-        animation: fly-to-logo 1.5s ease-out forwards;
-        will-change: transform, top, left;
-    }
-    
-    .loader-icon.spin-out {
-        animation: fade-and-scale-out 0.8s ease forwards;
-    }
-    
-    .spin-custom {
-        animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-    
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-    
-    @media (max-width: 700px) {
-        nav {
-            flex-direction: column;
-            gap: 1em;
-        }
-    }
-    
-    #storeGrid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-        padding: 20px;
-    }
-    
-    @media (max-width: 700px) {
-        #storeGrid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-    
-    .storecard {
-        background: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 15px;
-        text-align: center;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    
-    .storecard img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 4px;
-    }
-    
-    .storecard .card-bottom {
-        margin-top: auto;
-        padding-top: 10px;
-        padding-bottom: 1em;
-    }
-    
-    .storecard h1 {
-        font-size: 1.2em;
-        margin: 10px 0 5px 0;
-    }
-    
-    .storecard .price {
-        font-weight: bold;
-        color: #28a745;
-        margin-bottom: 10px;
-    }
-    
-    .storecard button {
-        padding: 8px 16px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    
-    .storecard button:hover {
-        background-color: #0056b3;
-    }
-    
-    .auto-fill-form {
-        display: none;
-        /* Initially hidden */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-    
-    .auto-fill-form.show {
-        display: flex;
-        /* This should be the state when the form is shown */
-    }
-    
-    .auto-fill-content {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        width: 300px;
-    }
-    
-    .auto-fill-content h3 {
-        margin-bottom: 10px;
-    }
-    
-    .auto-fill-content p {
-        margin: 10px 0;
-    }
-    
-    .auto-fill-form input,
-    .auto-fill-form button {
-        width: 100%;
-        padding: 12px;
-        margin: 8px 0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 1em;
-    }
-    
-    .auto-fill-form button {}
-    
-    .auto-fill-form button:hover {
-        background-color: #218838;
-    }
-    
-    .auto-fill-form .close-btn {
-        background-color: #dc3545;
-        color: white;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    
-    .auto-fill-form .close-btn:hover {
-        background-color: #c82333;
-    }
-    
-    #couponAlert {
-        display: none;
-        background-color: #fffbcc;
-        color: #333;
-        text-align: center;
-        padding: 1em;
-        font-weight: bold;
-        font-size: 1.1em;
-        border-bottom: 2px solid #ccc;
-    }
-    
-    @media (max-width: 700px) {
-        header h1 {
-            font-size: 1.2em;
-        }
-    
-        header p {
-            font-size: 0.9em;
-        }
-    
-        .logo-icon {
-            font-size: 2.5em;
-        }
-    
-        .logo-link {
-            top: 15px;
-            left: 15px;
-        }
-    }
-    
-    @media (max-width: 800px) {
-    
-        .logo,
-        .logo-icon,
-        .logo-link,
-        .loader-logo {
-            display: none !important;
-        }
-    }
-    
-    @media (max-width: 700px) {
-        header h1 {
-            font-size: 1.4em;
-        }
-    
-        header p {
-            font-size: 1em;
-        }
-    
-        h2 {
-            font-size: 1.3em;
-        }
-    
-        .card-title {
-            font-size: 1em;
-        }
-    
-        .storecard h1 {
-            font-size: 1em;
-        }
-    
-        nav a {
-            font-size: 1em;
-            padding: 0.5em 0;
-        }
-    
-        .card,
-        .storecard {
-            padding: 0.8em;
-        }
-    
-        .card .icon {
-            font-size: 1.5em;
-        }
-    
-        .logo-icon {
-            font-size: 2.5em;
-        }
-    
-        .logo-link {
-            top: 10px;
-            left: 10px;
-        }
-    
-        .contact-form input,
-        .contact-form textarea,
-        .contact-form button,
-        .donate-form input,
-        .donate-form button {
-            font-size: 0.95em;
-            padding: 10px;
-        }
-    
-        #storeGrid {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        }
-    
-        .modal-content {
-            width: 90%;
-            margin: 25% auto;
-        }
-    
-        .btn-book,
-        .btn-back {
-            width: 100%;
-            text-align: center;
-        }
-    }
-    
-    @media (max-width: 700px) {
-        nav {
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1em;
-        }
-    
-        nav a {
-            font-size: 1em;
-            padding: 0.6em 1em;
-            flex-shrink: 0;
-        }
-    
-        /* Donate Button - responsive placement */
-        .modal-open {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            font-size: 2em;
-            padding: 10px;
-            z-index: 999;
-            background: none;
-        }
-    
-        /* Modal Box */
-        .modal-content {
-            width: 90% !important;
-            margin: 25% auto;
-            padding: 1em;
-        }
-    }
-    
-    @media (max-width: 700px) {
-    
-        nav {
-            padding: 1px;
-        }
-    }
-    
-    @media (max-width: 700px) {
-    
-        header,
-        footer {
-            min-height: unset;
-        }
-    }
-    
-    @media (max-width: 700px) {
-    
-        header,
-        footer {
-            padding: 0.75em 1em;
-        }
-    
-        header h1 {
-            font-size: 1.1em;
-            margin: 0.2em 0;
-        }
-    
-        header p {
-            font-size: 0.85em;
-            margin: 0.2em 0;
-        }
-    
-        footer p {
-            font-size: 0.75em;
-            margin: 0.3em 0;
-        }
-    
-        footer p a {
-            font-size: 0.8em;
-        }
-    
-        footer {
-            line-height: 1.3em;
-        }
-    }
-    
-    @media (max-width: 700px) {
-        .modal-open {
-            display: none;
-        }
-    
-        .modal-open i {
-            font-size: clamp(1.5rem, 6vw, 2rem);
-        }
-    }
-    
-    body .modal-open {
-        font-size: clamp(1.2rem, 5vw, 1.6rem) !important;
-    }
-    
-    @media (max-width: 700px) {
-        .loader-logo {
-            font-size: 2.5em;
-        }
-    }
-  </style>
+<style>
+html, body { height: 100%; }
+body { margin: 0; font-family: Arial, sans-serif; background-color: #f7f7f7; display: flex; flex-direction: column; }
+header, footer { background-color: #222; color: white; text-align: center; padding: 1.2em; position: relative; }
+.logo-link { position: absolute; top: 30px; left: 30px; z-index: 1000; text-decoration: none; transition: transform 0.4s ease, opacity 0.4s ease; animation: tilt-shaking 5s infinite; }
+@keyframes tilt-shaking { 0% { transform: rotate(5deg); } 50% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
+.logo-link.hide { transform: translateY(-100px); opacity: 0; pointer-events: none; }
+.logo-icon { font-size: 5em; color: white; transition: transform 0.2s ease, font-size 0.3s ease; }
+.logo-icon:hover { transform: scale(1.2) rotate(-5deg); }
+nav { background: #333; display: flex; justify-content: center; gap: 2em; padding: 1em; flex-wrap: wrap; }
+nav a { color: white; text-decoration: none; font-weight: bold; }
+nav a:hover { text-decoration: underline; }
+main { flex: 1; padding: 2em; }
+h2 { margin-top: 2em; color: #222; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+@media (max-width: 700px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+.card { background: white; padding: 1.2em; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); transition: transform 0.2s ease; cursor: pointer; display: flex; gap: 0.8em; align-items: flex-start; flex-direction: column; }
+.card:hover { transform: translateY(-5px); }
+.card .icon { font-size: 1.8em; color: #444; }
+.card-title { font-weight: bold; font-size: 1.1em; margin-bottom: 0.3em; }
+.card-short { color: #555; }
+.service-page, .contact-page, .goal-page { display: none; background: white; padding: 2em; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); margin-top: 2em; }
+.contact-form input, .contact-form textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; font-size: 1em; }
+.contact-form button { background: #222; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-size: 1em; cursor: pointer; }
+.contact-form button:hover { background: #444; }
+.form-status { text-align: center; margin-top: 1em; font-weight: bold; }
+footer p a { color: #ccc; }
+.btn-back { display: inline-block; margin-top: 1em; background: #eee; padding: 10px 16px; border-radius: 6px; text-decoration: none; color: #333; font-weight: bold; transition: background 0.2s ease; }
+.btn-back:hover { background: #ddd; }
+.btn-book { margin-top: 1em; background: #007BFF; color: white; padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.btn-book:hover { background: #0056b3; }
+#loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #222; display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 1; transition: opacity 0.5s ease; }
+.loader-icon, .loader-logo { position: absolute; font-size: 7em; color: white; }
+@keyframes fade-and-scale-out { 0% { opacity: 1; transform: scale(1) rotate(0deg); } 100% { opacity: 0; transform: scale(0.3) rotate(360deg); } }
+@keyframes fly-to-logo { 0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8) opacity: 0; transform: rotate(0deg); } 50% { opacity: 1; } 100% { top: 30px; left: 30px; transform: scale(1); opacity: 1; transform: rotate(1080deg); } }
+.loader-logo { position: fixed; font-size: 5em; color: white; opacity: 0; z-index: 3000; transform: translate(0, 0); }
+.loader-logo.spin-custom { animation: spin 1s linear infinite; }
+.loader-logo.animate-in { animation: fly-to-logo 1.5s ease-out forwards; will-change: transform, top, left; }
+.loader-icon.spin-out { animation: fade-and-scale-out 0.8s ease forwards; }
+.spin-custom { animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@media (max-width: 700px) { nav { flex-direction: column; gap: 1em; } }
+#storeGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
+@media (max-width: 700px) { #storeGrid { grid-template-columns: repeat(3, 1fr); } }
+.storecard { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 15px; text-align: center; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; justify-content: space-between; }
+.storecard img { max-width: 100%; height: auto; border-radius: 4px; }
+.storecard .card-bottom { margin-top: auto; padding-top: 10px; padding-bottom: 1em; }
+.storecard h1 { font-size: 1.2em; margin: 10px 0 5px 0; }
+.storecard .price { font-weight: bold; color: #28a745; margin-bottom: 10px; }
+.storecard button { padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+.storecard button:hover { background-color: #0056b3; }
+.auto-fill-form { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 1000; }
+.auto-fill-form.show { display: flex; }
+.auto-fill-content { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; width: 300px; }
+.auto-fill-content h3 { margin-bottom: 10px; }
+.auto-fill-content p { margin: 10px 0; }
+.auto-fill-form input, .auto-fill-form button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 1em; }
+.auto-fill-form button:hover { background-color: #218838; }
+.auto-fill-form .close-btn { background-color: #dc3545; color: white; cursor: pointer; font-weight: bold; }
+.auto-fill-form .close-btn:hover { background-color: #c82333; }
+#couponAlert { display: none; background-color: #fffbcc; color: #333; text-align: center; padding: 1em; font-weight: bold; font-size: 1.1em; border-bottom: 2px solid #ccc; }
+@media (max-width: 700px) { header h1 { font-size: 1.2em; } header p { font-size: 0.9em; } .logo-icon { font-size: 2.5em; } .logo-link { top: 15px; left: 15px; } }
+@media (max-width: 800px) { .logo, .logo-icon, .logo-link, .loader-logo { display: none !important; } }
+@media (max-width: 700px) { header h1 { font-size: 1.4em; } header p { font-size: 1em; } h2 { font-size: 1.3em; } .card-title { font-size: 1em; } .storecard h1 { font-size: 1em; } nav a { font-size: 1em; padding: 0.5em 0; } .card, .storecard { padding: 0.8em; } .card .icon { font-size: 1.5em; } .logo-icon { font-size: 2.5em; } .logo-link { top: 10px; left: 10px; } .contact-form input, .contact-form textarea, .contact-form button, .donate-form input, .donate-form button { font-size: 0.95em; padding: 10px; } #storeGrid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .modal-content { width: 90%; margin: 25% auto; } .btn-book, .btn-back { width: 100%; text-align: center; } }
+@media (max-width: 700px) { nav { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 1em; } nav a { font-size: 1em; padding: 0.6em 1em; flex-shrink: 0; } .modal-open { position: fixed; bottom: 15px; right: 15px; font-size: 2em; padding: 10px; z-index: 999; background: none; } .modal-content { width: 90% !important; margin: 25% auto; padding: 1em; } }
+@media (max-width: 700px) { nav { padding: 1px; } }
+@media (max-width: 700px) { header, footer { min-height: unset; } }
+@media (max-width: 700px) { header, footer { padding: 0.75em 1em; } header h1 { font-size: 1.1em; margin: 0.2em 0; } header p { font-size: 0.85em; margin: 0.2em 0; } footer p { font-size: 0.75em; margin: 0.3em 0; } footer p a { font-size: 0.8em; } footer { line-height: 1.3em; } }
+@media (max-width: 700px) { .modal-open { display: none; } .modal-open i { font-size: clamp(1.5rem, 6vw, 2rem); } }
+body .modal-open { font-size: clamp(1.2rem, 5vw, 1.6rem) !important; }
+@media (max-width: 700px) { .loader-logo { font-size: 2.5em; } }
+#store-disabled-overlay { display: none; }
+@media screen { #store-disabled-overlay.active { display: flex !important; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 99999; align-items: center; justify-content: center; } }
+.disabled-modal-card { background: #f7f7f7; padding: 2.5rem 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); text-align: center; max-width: 400px; width: 90%; font-family: system-ui, -apple-system, sans-serif; }
+.disabled-modal-card h2 { margin-top: 0; color: #222; font-size: 1.5rem; }
+.disabled-modal-card p { color: #333; margin-bottom: 1.5rem; line-height: 1.4; }
+.disabled-modal-btn { background: #007bff; color: white; border: none; padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 500; border-radius: 6px; cursor: pointer; transition: background 0.2s ease; }
+.disabled-modal-btn:hover { background: #0056b3; }
+.modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); }
+.modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 35%; }
+.modal-close { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+.modal-close:hover, .modal-close:focus { color: black; text-decoration: none; cursor: pointer; }
+.modal-open { background: #222; position: absolute; bottom: 35px; right: 20px; border: none; font-size: 2em; animation: pulse 1.5s infinite; }
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-7.5px); } }
+.modal-open :hover { animation: bounce 0.75s; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+.donate-form input, .donate-form number { width: 95%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; font-size: 1em; }
+.donate-form button { background: #222; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-size: 1em; cursor: pointer; }
+.donate-form button:hover { background: #444; }
+</style>
 </head>
-
 <body>
-  <!-- Loader -->
+<!-- Loader -->
   <div id="loader">
     <i class="fas fa-spinner loader-icon spin-only spin-custom"></i>
     <i class="fas fa-handshake-angle loader-logo hidden"></i>
   </div>
   <header>
-    <a href="#home" class="logo-link">
-      <i class="fa-solid fa-handshake-angle logo-icon"></i>
-    </a>
+    <a href="#home" class="logo-link"><i class="fa-solid fa-handshake-angle logo-icon"></i></a>
     <h1>Looking for Help? Look No Further!</h1>
     <p>Local • Trusted • Friendly Service</p>
   </header>
@@ -688,16 +122,12 @@
   </nav>
   <main>
     <section id="donate">
-
       <h2>Donate</h2>
-      <form class="donate-form" action="https://formspree.io/f/mldblrrq"
-        method="POST">
+      <form class="donate-form" action="https://formspree.io/f/mldblrrq" method="POST">
         <input type="text" name="address" placeholder="Your Address" required />
-        <input type="number" name="amount" placeholder="Donation Amount"
-          required />
+        <input type="number" name="amount" placeholder="Donation Amount" required />
         <input type="hidden" name="_subject" value="New Donation!" />
-        <input type="hidden" name="_cc"
-          value="andygardner222@gmail.com,logangardner301@gmail.com" />
+        <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
         <button type="submit">Donate</button>
         <div class="form-status" id="formStatus"></div>
       </form>
@@ -709,563 +139,194 @@
     <section id="servicePage" class="service-page"></section>
     <section id="contact" class="contact-page">
       <h2>Contact Us</h2>
-      <form class="contact-form" action="https://formspree.io/f/mldblrrq"
-        method="POST">
+      <form class="contact-form" action="https://formspree.io/f/mldblrrq" method="POST">
         <input type="text" name="name" placeholder="Your Name" required />
         <input type="email" name="email" placeholder="Your Email" required />
         <input type="text" name="address" placeholder="Your Address" required />
-        <textarea name="message" placeholder="Your Message" rows="5"
-          required></textarea>
-        <input type="hidden" name="_subject"
-          value="New message from local help site!" />
-        <input type="hidden" name="_cc"
-          value="andygardner222@gmail.com,logangardner301@gmail.com" />
+        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+        <input type="hidden" name="_subject" value="New message from local help site!" />
+        <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
         <button type="submit">Send Message</button>
         <div class="form-status" id="formStatus"></div>
       </form>
     </section>
     <section id="goals" class="goal-page">
       <h2>Our Goal</h2>
-      <p>We’re working to raise $2,000. Every service booked helps us reach that
-        goal—thank you!</p>
-      <p>Can't find a service you're looking for? Let us know! We're here to
-        help</p>
+      <p>I'm working to raise $2,000. Every service booked helps me reach that goal—thank you!</p>
+      <p>Can't find a service you're looking for? Let us know! We're here to help</p>
     </section>
     <section id="store" class="storefront">
       <h2>Store</h2>
-      <div class="store-grid" id="storeGrid">
+      <div class="store-grid" id="storeGrid"></div>
+      <!-- Drop-in Temporarily Disabled Store Overlay with Back Button -->
+      <div id="store-disabled-overlay">
+        <div class="disabled-modal-card">
+          <h2>Store Temporarily Offline</h2>
+          <p>I am currently updating my inventory. Please check back shortly!</p>
+          <button class="disabled-modal-btn" onclick="handleStoreBackBtn()">Go Back</button>
+        </div>
       </div>
- <!-- Drop-in Temporarily Disabled Store Overlay with Back Button -->
-<div id="store-disabled-overlay">
-  <style>
-    #store-disabled-overlay {
-      display: none;
-    }
-    
-    /* Global overlay style when active */
-    @media screen {
-      #store-disabled-overlay.active {
-        display: flex !important;
-        position: fixed;
-        top: 0; left: 0; width: 100vw; height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(5px);
-        z-index: 99999;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-
-    /* Modal box styling */
-    .disabled-modal-card {
-      background: #f7f7f7;
-      padding: 2.5rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
-      font-family: system-ui, -apple-system, sans-serif;
-    }
-    .disabled-modal-card h2 { margin-top: 0; color: #222; font-size: 1.5rem; }
-    .disabled-modal-card p { color: #333; margin-bottom: 1.5rem; line-height: 1.4; }
-    
-    /* Elegant Go Back Button */
-    .disabled-modal-btn {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .disabled-modal-btn:hover {
-      background: #0056b3;
-    }
-  </style>
-
-  <!-- Modal Content Markup -->
-  <div class="disabled-modal-card">
-    <h2>Store Temporarily Offline</h2>
-    <p>We are currently updating our inventory. Please check back shortly!</p>
-    <button class="disabled-modal-btn" onclick="handleStoreBackBtn()">Go Back</button>
-  </div>
-
-  <!-- Route Guard Logic -->
-  <script>
-    function checkStoreHash() {
-      const overlay = document.getElementById('store-disabled-overlay');
-      if (window.location.hash === '#store') {
-        overlay.classList.add('active');
-        document.body.style.pointerEvents = 'none';
-        overlay.style.pointerEvents = 'auto';
-      } else {
-        overlay.classList.remove('active');
-        document.body.style.pointerEvents = 'auto';
-      }
-    }
-
-    function handleStoreBackBtn() {
-      // If there is history, go back. Otherwise, route to home.
-      if (document.referrer || window.history.length > 1) {
-        window.history.back();
-      } else {
-        window.location.hash = '#home';
-      }
-      
-      // Safety fallback: if history.back fails to change the hash immediately
-      setTimeout(() => {
-        if (window.location.hash === '#store') {
-          window.location.hash = '#home'; 
-        }
-      }, 100);
-    }
-
-    window.addEventListener('hashchange', checkStoreHash);
-    window.addEventListener('DOMContentLoaded', checkStoreHash);
-    checkStoreHash();
-  </script>
-</div>
     </section>
   </main>
   <footer>
-    <p>
-      © 2025 Neighborhood Helpers Services | Contact: <a
-        href="mailto:andygardner222@gmail.com">Andrew</a> & <a
-        href="mailto:logangardner301@gmail.com">Logan</a>
-    </p>
+    <p>© 2025 Neighborhood Helpers Services | Contact: <a href="mailto:andygardner222@gmail.com">Andrew</a></p>
     <p style="font-size:75%">Please note not all locations in service area</p>
-    <style>
-      .modal {
-          display: none;
-          /* Hidden by default */
-          position: fixed;
-          /* Stay in place */
-          z-index: 1;
-          /* Sit on top */
-          left: 0;
-          top: 0;
-          width: 100%;
-          /* Full width */
-          height: 100%;
-          /* Full height */
-          overflow: auto;
-          /* Enable scroll if needed */
-          background-color: rgba(0, 0, 0, 0.4);
-          /* Black w/ opacity */
-      }
-      
-      .modal-content {
-          background-color: #fefefe;
-          margin: 15% auto;
-          /* 15% from the top and centered */
-          padding: 20px;
-          border: 1px solid #888;
-          width: 35%;
-          /* Could be more or less, depending on screen size */
-      }
-      
-      .modal-close {
-          color: #aaa;
-          float: right;
-          font-size: 28px;
-          font-weight: bold;
-      }
-      
-      .modal-close:hover,
-      .modal-close:focus {
-          color: black;
-          text-decoration: none;
-          cursor: pointer;
-      }
-      
-      .modal-open {
-          background: #222;
-          position: absolute;
-          bottom: 35px;
-          right: 20px;
-          border: none;
-          font-size: 2em;
-          animation: pulse 1.5s infinite;
-      }
-      
-      @keyframes bounce {
-      
-          0%,
-          20%,
-          50%,
-          80%,
-          100% {
-              transform: translateY(0);
-          }
-      
-          40% {
-              transform: translateY(-20px);
-          }
-      
-          60% {
-              transform: translateY(-7.5px);
-          }
-      }
-      
-      .modal-open :hover {
-          animation: bounce 0.75s;
-      }
-      
-      @keyframes pulse {
-          0% {
-              transform: scale(1);
-          }
-      
-          50% {
-              transform: scale(1.1);
-          }
-      
-          100% {
-              transform: scale(1);
-          }
-      }
-    </style>
-
-    <button class="modal-open" id="openModal"><i
-        class="fa-solid fa-piggy-bank fa-2xl"
-        style="color: #ffffff;"></i></button>
-
+    <button class="modal-open" id="openModal"><i class="fa-solid fa-piggy-bank fa-2xl" style="color: #ffffff;"></i></button>
     <div id="modal" class="modal">
       <div class="modal-content">
         <span class="modal-close">&times;</span>
         <h2>Donate</h2>
-        <form class="donate-form" action="https://formspree.io/f/mldblrrq"
-          method="POST">
-          <input type="text" name="address" placeholder="Your Address"
-            required />
-          <input type="number" name="amount" placeholder="Donation Amount"
-            required />
+        <form class="donate-form" action="https://formspree.io/f/mldblrrq" method="POST">
+          <input type="text" name="address" placeholder="Your Address" required />
+          <input type="number" name="amount" placeholder="Donation Amount" required />
           <input type="hidden" name="_subject" value="New Donation!" />
-          <input type="hidden" name="_cc"
-            value="andygardner222@gmail.com,logangardner301@gmail.com" />
+          <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
           <button type="submit">Donate</button>
           <div class="form-status" id="formStatus"></div>
         </form>
       </div>
     </div>
-    <style>
-      .donate-form input,
-      .donate-form number {
-          width: 95%;
-          padding: 12px;
-          margin: 10px 0;
-          border-radius: 5px;
-          border: 1px solid #ccc;
-          font-size: 1em;
-      }
-      
-      .donate-form button {
-          background: #222;
-          color: white;
-          border: none;
-          padding: 12px 20px;
-          border-radius: 5px;
-          font-size: 1em;
-          cursor: pointer;
-      }
-      
-      .donate-form button:hover {
-          background: #444;
-      }
-    </style>
-
-    <script>
-      var modal = document.getElementById("modal");
-      var btn = document.getElementById("openModal");
-      var span = document.getElementsByClassName("modal-close")[0];
-      
-      btn.onclick = function() {
-          modal.style.display = "block";
-      }
-      
-      span.onclick = function() {
-          modal.style.display = "none";
-      }
-      
-      window.onclick = function(event) {
-          if (event.target == modal) {
-              modal.style.display = "none";
-          }
-      }
-    </script>
-
   </footer>
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const loader = document.getElementById('loader');
-        const spinner = loader.querySelector('.loader-icon');
-        const logo = loader.querySelector('.loader-logo');
-    
-        setTimeout(() => {
-            spinner.classList.add('spin-out');
-            logo.classList.remove('hidden');
-            logo.classList.add('animate-in');
-    
-            logo.addEventListener('animationend', () => {
-                // Add continuous spin after fly-to-logo finishes
-                logo.classList.add('spin-custom');
-            }, {
-                once: true
-            }); // To run this handler once only
-    
-            setTimeout(() => {
-                loader.style.opacity = 0;
-                setTimeout(() => loader.remove(), 1000);
-            }, 2500);
-        }, 2500);
-    });
-    const services = [{
-            title: "Lawncare",
-            short: "$15–50",
-            details: "Includes mowing, weeding, raking. Price depends on complexity.",
-            icon: "fa-leaf"
-        },
-        {
-            title: "Trash & Recycling Bin Service",
-            short: "$2–5/week",
-            details: "We'll take your bins to/from the curb weekly or on demand.",
-            icon: "fa-trash"
-        },
+  
+<!-- JavaScript -->
+<script>
+function checkStoreHash() {
+  const overlay = document.getElementById('store-disabled-overlay');
+  if (window.location.hash === '#store') { overlay.classList.add('active'); document.body.style.pointerEvents = 'none'; overlay.style.pointerEvents = 'auto'; }
+  else { overlay.classList.remove('active'); document.body.style.pointerEvents = 'auto'; }
+}
 
-        {
-            title: "Dog Walking",
-            short: "$10/day",
-            details: "Let us walk your pup and make sure they get some exercise!",
-            icon: "fa-dog"
-        },
-        {
-            title: "Watering Plants",
-            short: "$2 one-time | $5 weekly",
-            details: "Going on vacation? We'll water your plants while you're away.",
-            icon: "fa-seedling"
-        },
-        {
-            title: "Car Cleaning & Detailing",
-            short: "$25–125",
-            details: "Exterior wash is $25. Full detail ranges $50–125.",
-            icon: "fa-car"
-        },
-        {
-            title: "Tech Help",
-            short: "$0–3",
-            details: "We can help with tech issues like remotes or phones.",
-            icon: "fa-mobile-screen-button"
-        },
-        {
-            title: "Mail & Package Pickup",
-            short: "$5/week",
-            details: "Secure collection of mail/packages.",
-            icon: "fa-box"
-        },
-        {
-            title: "Custom Greeting Cards",
-            short: "$3–5 each",
-            details: "Hand-made cards for birthdays, holidays, and more.",
-            icon: "fa-credit-card"
-        },
-        {
-            title: "SVG and Logo creation",
-            short: "$25-100",
-            details: "Custom SVG's or Logos for you or your company.",
-            icon: "fa-image"
-        },
-        {
-            title: "Website & Web App creation",
-            short: "$50-200",
-            details: "Custom Website/App creation.",
-            icon: "fa-code"
-        },
-        {
-            title: "Photo digitization",
-            short: "$0.50 ea",
-            details: "Digitize your physical or film photos.",
-            icon: "fa-solid fa-photo-film"
-        },
-        {
-            title: "Flyer/poster creation",
-            short: "$10-30",
-            details: "Custom flyer/poster creation.",
-            icon: "fa-solid fa-file"
-        },
-        {
-            title: "Sticker creation",
-            short: "$2-10",
-            details: "Custom sticker creation.",
-            icon: "fa-solid fa-note-sticky"
-        },
-        {
-            title: "Pressure washing",
-            short: "$30-80",
-            details: "Pressure washing for driveways/decks.",
-            icon: "fa-solid fa-droplet"
-        },
-        {
-            title: "Videogame development",
-            short: "$20-50",
-            details: "Basic 2D videogame development.",
-            icon: "fa-solid fa-gamepad"
-        },
-        {
-            title: "Language translations",
-            short: "FREE",
-            details: "Translate documents.",
-            icon: "fa-solid fa-language"
-        },
-        {
-            title: "Award creation",
-            short: "$10",
-            details: "Custom awards to celebrate any occasion.",
-            icon: "fa-solid fa-award"
-        },
-        {
-            title: "POD",
-            short: "$2-30",
-            details: "Print on demand service for small batches.",
-            icon: "fa-solid fa-print"
-        },
-        {
-            title: "Code debugging",
-            short: "$25-50",
-            details: "Debug your code.",
-            icon: "fa-solid fa-bug-slash"
-        },
-    
-    ];
-    //Coupon on holiday
-    function isCouponDay() {
-        const today = new Date();
-        const holidays = [{
-                name: "New Year's Day",
-                match: d => d.getMonth() === 0 && d.getDate() === 1
-            },
-            {
-                name: "MLK Jr. Day",
-                match: d => d.getMonth() === 0 && d.getDate() >= 15 && d.getDate() <= 21
-            },
-            {
-                name: "Washington's Birthday",
-                match: d => d.getMonth() === 1 && d.getDate() >= 15 && d.getDate() <= 21
-            },
-            {
-                name: "Memorial Day",
-                match: d => d.getMonth() === 4 && d.getDate() >= 25 && d.getDate() <= 31
-            },
-            {
-                name: "Juneteenth",
-                match: d => d.getMonth() === 5 && d.getDate() === 19
-            },
-            {
-                name: "Independence Day",
-                match: d => d.getMonth() === 6 && d.getDate() === 4
-            },
-            {
-                name: "Labor Day",
-                match: d => d.getMonth() === 8 && d.getDate() >= 1 && d.getDate() <= 7
-            },
-            {
-                name: "Columbus Day",
-                match: d => d.getMonth() === 9 && d.getDate() >= 8 && d.getDate() <= 14
-            },
-            {
-                name: "Veterans Day",
-                match: d => d.getMonth() === 10 && d.getDate() === 11
-            },
-            {
-                name: "Thanksgiving",
-                match: d => d.getMonth() === 10 && d.getDate() >= 22 && d.getDate() <= 28
-            },
-            {
-                name: "Christmas Day",
-                match: d => d.getMonth() === 11 && d.getDate() === 25
-            }
-        ];
-        return holidays.find(h => h.match(today));
-    }
-    
-    function getDiscountedText(text) {
-        const holiday = isCouponDay();
-        if (!holiday) return text;
-        const match = text.match(/\\$(\\d+(\\.\\d+)?)/);
-        if (!match) return text;
-        const original = parseFloat(match[1]);
-        if (original <= 10) return text;
-        const discounted = (original - 5).toFixed(2);
-        return `${text} <br><span style="color:green;font-weight:bold;">Today: $${discounted} with $5 off!</span>`;
-    }
-    
-    function showCouponIfApplicable() {
-        const holiday = isCouponDay();
-        if (holiday && location.hash === '#home') {
-            const alert = document.getElementById('couponAlert');
-            alert.textContent = `🎉 Happy ${holiday.name}! Enjoy $5 off all services over $10 today only!`;
-            alert.style.display = 'block';
-        } else {
-            document.getElementById('couponAlert').style.display = 'none';
-        }
-    }
-    //Hash routing
-    function showPage(hash) {
-        document.querySelectorAll('main > section').forEach(sec => sec.style.display = 'none');
-        if (hash.startsWith('#service/')) {
-            const title = decodeURIComponent(hash.split('/')[1]);
-            const service = services.find(s => s.title === title);
-            const section = document.getElementById('servicePage');
-            section.innerHTML = service ? `
+function handleStoreBackBtn() {
+  if (document.referrer || window.history.length > 1) { window.history.back(); }
+  else { window.location.hash = '#home'; }
+  setTimeout(() => { if (window.location.hash === '#store') window.location.hash = '#home'; }, 100);
+}
+
+window.addEventListener('hashchange', checkStoreHash);
+window.addEventListener('DOMContentLoaded', checkStoreHash);
+checkStoreHash();
+window.addEventListener('DOMContentLoaded', () => {
+  const loader = document.getElementById('loader');
+  const spinner = loader.querySelector('.loader-icon');
+  const logo = loader.querySelector('.loader-logo');
+  setTimeout(() => {
+    spinner.classList.add('spin-out');
+    logo.classList.remove('hidden');
+    logo.classList.add('animate-in');
+    logo.addEventListener('animationend', () => { logo.classList.add('spin-custom'); }, { once: true });
+    setTimeout(() => { loader.style.opacity = 0; setTimeout(() => loader.remove(), 1000); }, 2500);
+  }, 2500);
+});
+
+const services = [
+  { title: "Lawncare", short: "$15–50", details: "Includes mowing, weeding, raking. Price depends on complexity.", icon: "fa-leaf" },
+  { title: "Trash & Recycling Bin Service", short: "$2–5/week", details: "We'll take your bins to/from the curb weekly or on demand.", icon: "fa-trash" },
+  { title: "Dog Walking", short: "$10/day", details: "Let us walk your pup and make sure they get some exercise!", icon: "fa-dog" },
+  { title: "Watering Plants", short: "$2 one-time | $5 weekly", details: "Going on vacation? We'll water your plants while you're away.", icon: "fa-seedling" },
+  { title: "Car Cleaning & Detailing", short: "$25–125", details: "Exterior wash is $25. Full detail ranges $50–125.", icon: "fa-car" },
+  { title: "Tech Help", short: "$0–3", details: "We can help with tech issues like remotes or phones.", icon: "fa-mobile-screen-button" },
+  { title: "Mail & Package Pickup", short: "$5/week", details: "Secure collection of mail/packages.", icon: "fa-box" },
+  { title: "Custom Greeting Cards", short: "$3–5 each", details: "Hand-made cards for birthdays, holidays, and more.", icon: "fa-credit-card" },
+  { title: "SVG and Logo creation", short: "$25-100", details: "Custom SVG's or Logos for you or your company.", icon: "fa-image" },
+  { title: "Website & Web App creation", short: "$50-200", details: "Custom Website/App creation.", icon: "fa-code" },
+  { title: "Photo digitization", short: "$0.50 ea", details: "Digitize your physical or film photos.", icon: "fa-solid fa-photo-film" },
+  { title: "Flyer/poster creation", short: "$10-30", details: "Custom flyer/poster creation.", icon: "fa-solid fa-file" },
+  { title: "Sticker creation", short: "$2-10", details: "Custom sticker creation.", icon: "fa-solid fa-note-sticky" },
+  { title: "Pressure washing", short: "$30-80", details: "Pressure washing for driveways/decks.", icon: "fa-solid fa-droplet" },
+  { title: "Videogame development", short: "$20-50", details: "Basic 2D videogame development.", icon: "fa-solid fa-gamepad" },
+  { title: "Language translations", short: "FREE", details: "Translate documents.", icon: "fa-solid fa-language" },
+  { title: "Award creation", short: "$10", details: "Custom awards to celebrate any occasion.", icon: "fa-solid fa-award" },
+  { title: "POD", short: "$2-30", details: "Print on demand service for small batches.", icon: "fa-solid fa-print" },
+  { title: "Code debugging", short: "$25-50", details: "Debug your code.", icon: "fa-solid fa-bug-slash" },
+];
+
+//Coupon on holiday
+function isCouponDay() {
+  const today = new Date();
+  const holidays = [
+    { name: "New Year's Day", match: d => d.getMonth() === 0 && d.getDate() === 1 },
+    { name: "MLK Jr. Day", match: d => d.getMonth() === 0 && d.getDate() >= 15 && d.getDate() <= 21 },
+    { name: "Washington's Birthday", match: d => d.getMonth() === 1 && d.getDate() >= 15 && d.getDate() <= 21 },
+    { name: "Memorial Day", match: d => d.getMonth() === 4 && d.getDate() >= 25 && d.getDate() <= 31 },
+    { name: "Juneteenth", match: d => d.getMonth() === 5 && d.getDate() === 19 },
+    { name: "Independence Day", match: d => d.getMonth() === 6 && d.getDate() === 4 },
+    { name: "Labor Day", match: d => d.getMonth() === 8 && d.getDate() >= 1 && d.getDate() <= 7 },
+    { name: "Columbus Day", match: d => d.getMonth() === 9 && d.getDate() >= 8 && d.getDate() <= 14 },
+    { name: "Veterans Day", match: d => d.getMonth() === 10 && d.getDate() === 11 },
+    { name: "Thanksgiving", match: d => d.getMonth() === 10 && d.getDate() >= 22 && d.getDate() <= 28 },
+    { name: "Christmas Day", match: d => d.getMonth() === 11 && d.getDate() === 25 },
+  ];
+  return holidays.find(h => h.match(today));
+}
+
+function getDiscountedText(text) {
+  const holiday = isCouponDay();
+  if (!holiday) return text;
+  const match = text.match(/\$(\d+(\.\d+)?)/);
+  if (!match) return text;
+  const original = parseFloat(match[1]);
+  if (original <= 10) return text;
+  const discounted = (original - 5).toFixed(2);
+  return `${text} <br><span style="color:green;font-weight:bold;">Today: $${discounted} with $5 off!</span>`;
+}
+
+function showCouponIfApplicable() {
+  const holiday = isCouponDay();
+  if (holiday && location.hash === '#home') {
+    const alert = document.getElementById('couponAlert');
+    alert.textContent = `🎉 Happy ${holiday.name}! Enjoy $5 off all services over $10 today only!`;
+    alert.style.display = 'block';
+  } else {
+    document.getElementById('couponAlert').style.display = 'none';
+  }
+}
+
+//Hash routing
+function showPage(hash) {
+  document.querySelectorAll('main > section').forEach(sec => sec.style.display = 'none');
+  if (hash.startsWith('#service/')) {
+    const title = decodeURIComponent(hash.split('/')[1]);
+    const service = services.find(s => s.title === title);
+    const section = document.getElementById('servicePage');
+    section.innerHTML = service ? `
     <h2><i class="fas ${service.icon}"></i> ${service.title}</h2>
     <p><strong>Price:</strong> ${getDiscountedText(service.short)}</p>
     <p>${service.details}</p>
     <a href="#home" class="btn-back">← Return to Services</a>
     ` : `<p>Service not found.</p>`;
-            section.style.display = 'block';
-        } else {
-            const id = hash.replace('#', '') || 'home';
-            const section = document.getElementById(id);
-            if (section) {
-                section.style.display = 'block';
-                showCouponIfApplicable();
-            }
-        }
-    }
-    
-    function initServices() {
-        const grid = document.getElementById('serviceGrid');
-        services.forEach(service => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
+    section.style.display = 'block';
+  } else {
+    const id = hash.replace('#', '') || 'home';
+    const section = document.getElementById(id);
+    if (section) { section.style.display = 'block'; showCouponIfApplicable(); }
+  }
+}
+
+function initServices() {
+  const grid = document.getElementById('serviceGrid');
+  services.forEach(service => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
     <div class="icon"><i class="fas ${service.icon}"></i></div>
     <div>
     <div class="card-title">${service.title}</div>
     <div class="card-short">${getDiscountedText(service.short)}</div>
     </div>
     `;
-            // Custom behavior for Lawncare card
-            if (service.title.toLowerCase() === "lawncare") {
-                card.onclick = () => window.location.href = "https://andrew-gardner22.github.io/rrlawncare/";
-            } else {
-                card.onclick = () => location.hash = `#service/${encodeURIComponent(service.title)}`;
-            }
-            grid.appendChild(card);
-        });
-    }
-    
-    
-    function showPage(hash) {
-        document.querySelectorAll('main > section').forEach(sec => sec.style.display = 'none');
-        if (hash.startsWith('#service/')) {
-            const title = decodeURIComponent(hash.split('/')[1]);
-            const service = services.find(s => s.title === title);
-            const section = document.getElementById('servicePage');
-            section.innerHTML = service ? `
+    if (service.title.toLowerCase() === "lawncare") { card.onclick = () => window.location.href = "https://andrew-gardner22.github.io/rrlawncare/"; }
+    else { card.onclick = () => location.hash = `#service/${encodeURIComponent(service.title)}`; }
+    grid.appendChild(card);
+  });
+}
+
+function showPage(hash) {
+  document.querySelectorAll('main > section').forEach(sec => sec.style.display = 'none');
+  if (hash.startsWith('#service/')) {
+    const title = decodeURIComponent(hash.split('/')[1]);
+    const service = services.find(s => s.title === title);
+    const section = document.getElementById('servicePage');
+    section.innerHTML = service ? `
     <h2><i class="fas ${service.icon}"></i> ${service.title}</h2>
     <p><strong>Price:</strong> ${service.short}</p>
     <p>${service.details}</p>
@@ -1273,169 +334,102 @@
     <button class="btn-book" onclick="bookService('${service.title}')">Book Service</button><br>
     <a href="#home" class="btn-back">← Return to Services</a>
     ` : `<p>Service not found.</p>`;
-            section.style.display = 'block';
-        } else {
-            const id = hash.replace('#', '') || 'home';
-            const section = document.getElementById(id);
-            if (section) section.style.display = 'block';
-        }
-    }
-    
-    function initRouter() {
-        window.addEventListener('hashchange', () => showPage(location.hash));
-        showPage(location.hash);
-    }
-    const storeItems = [{
-            name: "Nerf Elite 2.0 cs-10 blaster",
-            price: "$35",
-            image: "https://m.media-amazon.com/images/I/51D6jTaSWNL._AC_UF894,1000_QL80_.jpg"
-        },
-        {
-            name: "2x Nerf Elite Disruptor",
-            price: "$25",
-            image: "https://i.mmo.cm/is/image/mmoimg/bp-product-max/nerf-elite-disruptor-2x-pack--142713-1.jpg"
-        },
-        {
-            name: "Bluetooth Wireless speaker",
-            price: "$25",
-            image: "https://m.media-amazon.com/images/I/718BUKFjwpL._AC_UF894,1000_QL80_.jpg"
-        },
-        {
-            name: "'War Machine' by Andy Remic",
-            price: "$10",
-            image: "https://i5.walmartimages.com/asr/93161983-44c9-4f61-b599-801bd1ef21eb.5a6ffec79dd4c0eb5930c8eef09e420b.jpeg"
-        },
-        {
-            name: "4-in-1 Nerf Metamorph blaster",
-            price: "$30",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQww4ck52075ypX3z-5mlVEwp5mH-rHSdOVtQ&s"
-        },
-        {
-            name: "Nerf DragonPower SkyBlaze bow",
-            price: "$35",
-            image: "https://i5.walmartimages.com/asr/9733e14e-173d-4265-b8eb-07337ceffcb7.5e4910d9e3f14d5c7147406e4cd4cb3f.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF"
-        },
-        {
-            name: "'Brillancies' by Yasser Seirawan",
-            price: "$15",
-            image: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSm6gzQ3749q3XehLnXX9OpOG6Xlumk-ZReUkauuQ7iR0DyDoGC"
-        },
-        {
-            name: "Coding projects in scratch",
-            price: "$15",
-            image: "https://m.media-amazon.com/images/I/61GQZ9QQh8L._AC_UF1000,1000_QL80_.jpg"
-        },
-        {
-            name: "Coding games in scratch",
-            price: "$15",
-            image: "https://images.penguinrandomhouse.com/cover/9781465495020"
-        },
-        {
-            name: "Wooden crossbow toy",
-            price: "$20",
-            image: "https://www.kroger.com/product/images/large/front/0084347912553"
-        },
-        {
-            name: "Hovering RC helicopter toy",
-            price: "$10",
-            image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRfMz0_AVZctp9d3gsXiOLDqN1LXTb7FjtdFxxwXJO2ClS_zaymSxwtlfCQbImg7GOkxyjtp0uRgyttPPNG0VA4uXnxtg4mGtdSy5WpejK-dQ0PSBMo6oMzVQ"
-        },
-        {
-            name: "Mongoose Spectra - REQUIRES WORK",
-            price: "$50 OBO",
-            image: "https://c.shld.net/rpx/i/s/i/spin/image/spin_prod_761153212"
-        },
-        {
-            name: "King Arthur and his knights of the round table",
-            price: "$10",
-            image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQXfmuDRvurncu3EsSPMR5zwU7odQ566Ch2QAQt8UTv_qdne47x_Srjietm9gEjQWLSE84EFFKS3NPnA1TW778TzW3N76xy5P6KimcafmLC_d-LKimzCo19"
-        },
-        {
-            name: "Tales of the Greek heroes",
-            price: "$10",
-            image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQWkLliy9j1CG1vPgcbqAn64tpCqFSHLCRu1uSUh-ea8CWrmr7-TOKs3P7xS7iKjxuUooTdqZ2O63s4Ey0CnfBFoOxhmn7FWYmxT5OG6HAiu-sTCYdl3SZ2"
-        },
-        {
-            name: "The adventures of Robin Hood",
-            price: "$10",
-            image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTvm-NM2KDIZIJaK-6CK3j1spq25Kjm3OaRHxdlTqV_eV7Tqel4tCxNyQWf5aKDZkugGX8PlTew9NxP_Rn-n3vajkKxeb9wbdI0pVgBnlq2RdvhbKi9SueNsA"
-        },
-        {
-            name: "SpyX Lazer alarm trap",
-            price: "$20",
-            image: "https://shop.spyscape.com/cdn/shop/products/laser1.png?v=1587097632"
-        },
-        // Add more products as needed
-    ];
-    
-    function initStore() {
-        const grid = document.getElementById('storeGrid');
-        grid.innerHTML = '';
-        storeItems.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'storecard';
-            card.innerHTML = `
+    section.style.display = 'block';
+  } else {
+    const id = hash.replace('#', '') || 'home';
+    const section = document.getElementById(id);
+    if (section) section.style.display = 'block';
+  }
+}
+
+function initRouter() {
+  window.addEventListener('hashchange', () => showPage(location.hash));
+  showPage(location.hash);
+}
+
+const storeItems = [
+  { name: "Nerf Elite 2.0 cs-10 blaster", price: "$35", image: "https://m.media-amazon.com/images/I/51D6jTaSWNL._AC_UF894,1000_QL80_.jpg" },
+  { name: "2x Nerf Elite Disruptor", price: "$25", image: "https://i.mmo.cm/is/image/mmoimg/bp-product-max/nerf-elite-disruptor-2x-pack--142713-1.jpg" },
+  { name: "Bluetooth Wireless speaker", price: "$25", image: "https://m.media-amazon.com/images/I/718BUKFjwpL._AC_UF894,1000_QL80_.jpg" },
+  { name: "'War Machine' by Andy Remic", price: "$10", image: "https://i5.walmartimages.com/asr/93161983-44c9-4f61-b599-801bd1ef21eb.5a6ffec79dd4c0eb5930c8eef09e420b.jpeg" },
+  { name: "4-in-1 Nerf Metamorph blaster", price: "$30", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQww4ck52075ypX3z-5mlVEwp5mH-rHSdOVtQ&s" },
+  { name: "Nerf DragonPower SkyBlaze bow", price: "$35", image: "https://i5.walmartimages.com/asr/9733e14e-173d-4265-b8eb-07337ceffcb7.5e4910d9e3f14d5c7147406e4cd4cb3f.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF" },
+  { name: "'Brillancies' by Yasser Seirawan", price: "$15", image: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSm6gzQ3749q3XehLnXX9OpOG6Xlumk-ZReUkauuQ7iR0DyDoGC" },
+  { name: "Coding projects in scratch", price: "$15", image: "https://m.media-amazon.com/images/I/61GQZ9QQh8L._AC_UF1000,1000_QL80_.jpg" },
+  { name: "Coding games in scratch", price: "$15", image: "https://images.penguinrandomhouse.com/cover/9781465495020" },
+  { name: "Wooden crossbow toy", price: "$20", image: "https://www.kroger.com/product/images/large/front/0084347912553" },
+  { name: "Hovering RC helicopter toy", price: "$10", image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRfMz0_AVZctp9d3gsXiOLDqN1LXTb7FjtdFxxwXJO2ClS_zaymSxwtlfCQbImg7GOkxyjtp0uRgyttPPNG0VA4uXnxtg4mGtdSy5WpejK-dQ0PSBMo6oMzVQ" },
+  { name: "Mongoose Spectra - REQUIRES WORK", price: "$50 OBO", image: "https://c.shld.net/rpx/i/s/i/spin/image/spin_prod_761153212" },
+  { name: "King Arthur and his knights of the round table", price: "$10", image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQXfmuDRvurncu3EsSPMR5zwU7odQ566Ch2QAQt8UTv_qdne47x_Srjietm9gEjQWLSE84EFFKS3NPnA1TW778TzW3N76xy5P6KimcafmLC_d-LKimzCo19" },
+  { name: "Tales of the Greek heroes", price: "$10", image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQWkLliy9j1CG1vPgcbqAn64tpCqFSHLCRu1uSUh-ea8CWrmr7-TOKs3P7xS7iKjxuUooTdqZ2O63s4Ey0CnfBFoOxhmn7FWYmxT5OG6HAiu-sTCYdl3SZ2" },
+  { name: "The adventures of Robin Hood", price: "$10", image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTvm-NM2KDIZIJaK-6CK3j1spq25Kjm3OaRHxdlTqV_eV7Tqel4tCxNyQWf5aKDZkugGX8PlTew9NxP_Rn-n3vajkKxeb9wbdI0pVgBnlq2RdvhbKi9SueNsA" },
+  { name: "SpyX Lazer alarm trap", price: "$20", image: "https://shop.spyscape.com/cdn/shop/products/laser1.png?v=1587097632" },
+];
+
+function initStore() {
+  const grid = document.getElementById('storeGrid');
+  grid.innerHTML = '';
+  storeItems.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'storecard';
+    card.innerHTML = `
     <img src="${item.image}" alt="${item.name}" width="100%">
     <h1>${item.name}</h1>
     <p class="price">${item.price}</p>
     <p><button onclick="buyProduct('${item.name}', '${item.price}')">Buy</button></p>
     `;
-            grid.appendChild(card);
-        });
-    }
-    
-    function bookService(serviceName) {
-        location.hash = '#contact';
-        setTimeout(() => {
-            const messageBox = document.querySelector('.contact-form textarea');
-            if (messageBox) messageBox.value = `I'm interested in booking: ${serviceName}`;
-        }, 100);
-    }
-    
-    function initForm() {
-        const form = document.querySelector('.contact-form');
-        const status = document.getElementById('formStatus');
-        form.addEventListener('submit', function(e) {
-            status.textContent = "Sending...";
-            setTimeout(() => {
-                status.textContent = "Message sent! We'll be in touch soon.";
-                form.reset();
-            }, 1500);
-        });
-    }
-    
-    function buyProduct(name, price) {
-        location.hash = '#contact';
-        setTimeout(() => {
-            const messageBox = document.querySelector('.contact-form textarea');
-            if (messageBox) {
-                messageBox.value = `I would like to buy ${name} for ${price}.`;
-            }
-        }, 200); // delay ensures page has loaded
-    }
-    
-    function closeAutoFillForm() {
-        document.getElementById("autoFillForm").classList.remove("show");
-    }
-    const storeGrid = document.getElementById('storeGrid');
-    storeItems.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'storecard';
-        card.innerHTML = `
+    grid.appendChild(card);
+  });
+}
+
+function bookService(serviceName) {
+  location.hash = '#contact';
+  setTimeout(() => { const messageBox = document.querySelector('.contact-form textarea'); if (messageBox) messageBox.value = `I'm interested in booking: ${serviceName}`; }, 100);
+}
+
+function initForm() {
+  const form = document.querySelector('.contact-form');
+  const status = document.getElementById('formStatus');
+  form.addEventListener('submit', function(e) {
+    status.textContent = "Sending...";
+    setTimeout(() => { status.textContent = "Message sent! We'll be in touch soon."; form.reset(); }, 1500);
+  });
+}
+
+function buyProduct(name, price) {
+  location.hash = '#contact';
+  setTimeout(() => { const messageBox = document.querySelector('.contact-form textarea'); if (messageBox) messageBox.value = `I would like to buy ${name} for ${price}.`; }, 200); // delay ensures page has loaded
+}
+
+function closeAutoFillForm() { document.getElementById("autoFillForm").classList.remove("show"); }
+
+const storeGrid = document.getElementById('storeGrid');
+storeItems.forEach(item => {
+  const card = document.createElement('div');
+  card.className = 'storecard';
+  card.innerHTML = `
     <img src="${item.image}" alt="${item.name}">
     <h1>${item.name}</h1>
     <p class="price">${item.price}</p>
     <button onclick="buyProduct('${item.name}', '${item.price}')">Buy</button>
     `;
-        storeGrid.appendChild(card);
-    });
-    document.addEventListener("DOMContentLoaded", () => {
-        initServices();
-        initStore();
-        initRouter();
-        initForm();
-    });
-  </script>
-</body>
+  storeGrid.appendChild(card);
+});
 
+document.addEventListener("DOMContentLoaded", () => {
+  initServices();
+  initStore();
+  initRouter();
+  initForm();
+});
+var modal = document.getElementById("modal");
+var btn = document.getElementById("openModal");
+var span = document.getElementsByClassName("modal-close")[0];
+
+btn.onclick = function() { modal.style.display = "block"; }
+span.onclick = function() { modal.style.display = "none"; }
+window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
+</script>
+
+</body>
 </html>
