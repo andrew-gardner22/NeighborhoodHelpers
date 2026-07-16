@@ -28,11 +28,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 const services = [
   { title: "Lawncare", short: "$15–50", details: "Includes mowing, weeding, raking. Price depends on complexity.", icon: "fa-leaf" },
-  { title: "Trash & Recycling Bin Service", short: "$2–5/week", details: "We'll take your bins to/from the curb weekly or on demand.", icon: "fa-trash" },
-  { title: "Dog Walking", short: "$10/day", details: "Let us walk your pup and make sure they get some exercise!", icon: "fa-dog" },
-  { title: "Watering Plants", short: "$2 one-time | $5 weekly", details: "Going on vacation? We'll water your plants while you're away.", icon: "fa-seedling" },
+  { title: "Trash & Recycling Bin Service", short: "$2–5/week", details: "I'll take your bins to/from the curb weekly or on demand.", icon: "fa-trash" },
+  { title: "Dog Walking", short: "$10/day", details: "Let  walk your pup and make sure they get some exercise!", icon: "fa-dog" },
+  { title: "Watering Plants", short: "$2 one-time | $5 weekly", details: "Going on vacation? I'll water your plants while you're away.", icon: "fa-seedling" },
   { title: "Car Cleaning & Detailing", short: "$25–125", details: "Exterior wash is $25. Full detail ranges $50–125.", icon: "fa-car" },
-  { title: "Tech Help", short: "$0–3", details: "We can help with tech issues like remotes or phones.", icon: "fa-mobile-screen-button" },
+  { title: "Tech Help", short: "$0–3", details: "I can help with tech issues like remotes or phones.", icon: "fa-mobile-screen-button" },
   { title: "Mail & Package Pickup", short: "$5/week", details: "Secure collection of mail/packages.", icon: "fa-box" },
   { title: "Custom Greeting Cards", short: "$3–5 each", details: "Hand-made cards for birthdays, holidays, and more.", icon: "fa-credit-card" },
   { title: "SVG and Logo creation", short: "$25-100", details: "Custom SVG's or Logos for you or your company.", icon: "fa-image" },
