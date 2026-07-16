@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neighborhood Helpers</title>
+
+  <link rel="icon" type="image/png" href="favicon-32x32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" href="favicon-32x32_dark.png" media="(prefers-color-scheme: dark)">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="loader">
+    <i class="fas fa-spinner loader-icon spin-only spin-custom"></i>
+    <i class="fas fa-handshake-angle loader-logo hidden"></i>
+  </div>
+
+  <header>
+    <a href="#home" class="logo-link">
+      <i class="fa-solid fa-handshake-angle logo-icon"></i>
+    </a>
+    <h1>Looking for Help? Look No Further!</h1>
+    <p>Local • Trusted • Friendly Service</p>
+  </header>
+
+  <nav>
+    <a href="#home">Services</a>
+    <a href="#contact">Contact</a>
+    <a href="#goals">Goals</a>
+    <a href="#store">Store</a>
+    <a href="#donate">Donate</a>
+  </nav>
+
+  <div id="couponAlert"></div>
+
+  <main>
+    <section id="donate">
+      <h2>Donate</h2>
+      <form class="donate-form" action="https://formspree.io/f/mldblrrq" method="POST">
+        <input type="text" name="address" placeholder="Your Address" required />
+        <input type="number" name="amount" placeholder="Donation Amount" required />
+        <input type="hidden" name="_subject" value="New Donation!" />
+        <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
+        <button type="submit">Donate</button>
+        <div class="form-status"></div>
+      </form>
+    </section>
+
+    <section id="home">
+      <h2>Services We Offer</h2>
+      <div class="grid" id="serviceGrid"></div>
+    </section>
+
+    <section id="servicePage" class="service-page"></section>
+
+    <section id="contact" class="contact-page">
+      <h2>Contact Us</h2>
+      <form class="contact-form" action="https://formspree.io/f/mldblrrq" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <input type="text" name="address" placeholder="Your Address" required />
+        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+        <input type="hidden" name="_subject" value="New message from local help site!" />
+        <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
+        <button type="submit">Send Message</button>
+        <div class="form-status" id="formStatus"></div>
+      </form>
+    </section>
+
+    <section id="goals" class="goal-page">
+      <h2>Our Goal</h2>
+      <p>We're working to raise $2,000. Every service booked helps us reach that goal—thank you!</p>
+      <p>Can't find a service you're looking for? Let us know! We're here to help</p>
+    </section>
+
+    <section id="store" class="storefront">
+      <h2>Store</h2>
+      <div class="store-grid" id="storeGrid"></div>
+
+      <!-- Store temporarily disabled overlay -->
+      <div id="store-disabled-overlay">
+        <div class="disabled-modal-card">
+          <h2>Store Temporarily Offline</h2>
+          <p>We are currently updating our inventory. Please check back shortly!</p>
+          <button class="disabled-modal-btn" onclick="handleStoreBackBtn()">Go Back</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      © 2025 Neighborhood Helpers Services | Contact:
+      <a href="mailto:andygardner222@gmail.com">Andrew</a> &
+      <a href="mailto:logangardner301@gmail.com">Logan</a>
+    </p>
+    <p style="font-size:75%">Please note not all locations in service area</p>
+
+    <button class="modal-open" id="openModal">
+      <i class="fa-solid fa-piggy-bank fa-2xl" style="color: #ffffff;"></i>
+    </button>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <h2>Donate</h2>
+        <form class="donate-form" action="https://formspree.io/f/mldblrrq" method="POST">
+          <input type="text" name="address" placeholder="Your Address" required />
+          <input type="number" name="amount" placeholder="Donation Amount" required />
+          <input type="hidden" name="_subject" value="New Donation!" />
+          <input type="hidden" name="_cc" value="andygardner222@gmail.com,logangardner301@gmail.com" />
+          <button type="submit">Donate</button>
+          <div class="form-status"></div>
+        </form>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
