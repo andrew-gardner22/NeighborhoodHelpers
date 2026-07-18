@@ -80,8 +80,8 @@ footer p a { color: #ccc; }
   .grid { grid-template-columns: repeat(2, 1fr); }
   header h1 { font-size: 1.4em; }
   header p { font-size: 1em; }
-  nav { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 1em; }
-  nav a { font-size: 1em; padding: 0.6em 1em; flex-shrink: 0; }
+  nav { flex-direction: row; flex-wrap: nowrap; justify-content: space-between; gap: clamp(0.2em, 1vw, 1em); padding: 0.6em clamp(0.3em, 2vw, 1em); }
+  nav a { font-size: clamp(0.7rem, 3.2vw, 1em); padding: 0.5em clamp(0.2em, 1.5vw, 0.8em); white-space: nowrap; flex-shrink: 1; }
   h2 { font-size: 1.3em; }
   .card-title, .storecard h1 { font-size: 1em; }
   .card, .storecard { padding: 0.8em; }
