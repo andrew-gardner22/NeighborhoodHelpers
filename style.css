@@ -92,20 +92,20 @@ footer p a { color: #ccc; }
   header h1 { font-size: 1.3em; margin: 0 0 0.3em; line-height: 1.3; }
   header p { font-size: 0.95em; margin: 0; }
 
-  /* Nav: full-width stacked list instead of squeezed inline links */
-  nav { flex-direction: column; gap: 0; padding: 0; }
+  /* Nav: wraps into ~2 rows of inline pill links instead of stacking full-width */
+  nav { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.5em; padding: 0.75em 1em; }
   nav a {
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 1em;
-    padding: 0.9em 1em;
+    width: auto;
+    font-size: 0.95em;
+    padding: 0.6em 1em;
     min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: none;
+    background: rgba(255,255,255,0.08);
+    border-radius: 6px;
   }
-  nav a:last-child { border-bottom: none; }
 
   /* Footer: roomier, no more tiny squished text */
   footer { padding: 1.5em 1em; line-height: 1.5; }
