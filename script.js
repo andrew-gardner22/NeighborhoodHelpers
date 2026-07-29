@@ -100,6 +100,8 @@ function showPage(hash) {
     <h2><i class="fas ${service.icon}"></i> ${service.title}</h2>
     <p><strong>Price:</strong> ${getDiscountedText(service.short)}</p>
     <p>${service.details}</p>
+    <p style=font-size:75%>Prices subject to change.</p>
+    <button class="btn-book" onclick="bookService('${service.title}')">Book Service</button><br>
     <a href="#home" class="btn-back">← Return to Services</a>
     ` : `<p>Service not found.</p>`;
     section.style.display = 'block';
@@ -126,28 +128,6 @@ function initServices() {
     else { card.onclick = () => location.hash = `#service/${encodeURIComponent(service.title)}`; }
     grid.appendChild(card);
   });
-}
-
-function showPage(hash) {
-  document.querySelectorAll('main > section').forEach(sec => sec.style.display = 'none');
-  if (hash.startsWith('#service/')) {
-    const title = decodeURIComponent(hash.split('/')[1]);
-    const service = services.find(s => s.title === title);
-    const section = document.getElementById('servicePage');
-    section.innerHTML = service ? `
-    <h2><i class="fas ${service.icon}"></i> ${service.title}</h2>
-    <p><strong>Price:</strong> ${service.short}</p>
-    <p>${service.details}</p>
-    <p style=font-size:75%>Prices subject to change.</p>
-    <button class="btn-book" onclick="bookService('${service.title}')">Book Service</button><br>
-    <a href="#home" class="btn-back">← Return to Services</a>
-    ` : `<p>Service not found.</p>`;
-    section.style.display = 'block';
-  } else {
-    const id = hash.replace('#', '') || 'home';
-    const section = document.getElementById(id);
-    if (section) section.style.display = 'block';
-  }
 }
 
 function initRouter() {
@@ -211,25 +191,13 @@ function buyProduct(name, price) {
 
 function closeAutoFillForm() { document.getElementById("autoFillForm").classList.remove("show"); }
 
-const storeGrid = document.getElementById('storeGrid');
-storeItems.forEach(item => {
-  const card = document.createElement('div');
-  card.className = 'storecard';
-  card.innerHTML = `
-    <img src="${item.image}" alt="${item.name}">
-    <h1>${item.name}</h1>
-    <p class="price">${item.price}</p>
-    <button onclick="buyProduct('${item.name}', '${item.price}')">Buy</button>
-    `;
-  storeGrid.appendChild(card);
-});
-
 document.addEventListener("DOMContentLoaded", () => {
   initServices();
   initStore();
   initRouter();
   initForm();
 });
+
 var modal = document.getElementById("modal");
 var btn = document.getElementById("openModal");
 var span = document.getElementsByClassName("modal-close")[0];
